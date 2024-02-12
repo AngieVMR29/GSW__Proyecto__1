@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Inicio Greensoftworld</title>
+</head>
+
+<body>
+    <nav>
+        <div class="contaier-fluid main_container">
+            <div class="row-auto firts_box">
+                <div class="col box_title" style="margin-right: 700px;">
+                    <h3 class="title">GreenSoftWorld</h3>
+                </div>
+                <div class="col box_lenguaje_register_login">
+                    <button class="dropdown-toggle buttonRegister" type="button" data-bs-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false"><i class="bi bi-person-add"></i>Registrarse</button>
+                    <div class="dropdown-menu box_form_register" aria-labelledby="dropdownMenuButton">
+                        <form action="" class="form-control form_register">
+                            <div class="name">
+                                <label for="">Nombres: <input type="text" id="nombres" class="form-control"></label>
+                            </div>
+                            <div class="lastname">
+                                <label for="">Apellidos: <input type="text" id="apellidos" class="form-control"></label>
+                            </div>
+                            <div class="Typedoc">
+                                <label for=""> Tipo de documento:
+                                    <select class="form-select" style="width: 208px;">
+                                        <option value="1"> Seleccione </option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select></label>
+                            </div>
+                            <div class="Doc">
+                                <label for="">Número de documento: <input type="int" id="documento"
+                                        class="form-control"></label>
+                            </div>
+                            <div class="password">
+                                <label for="">Contraseña: <input type="password" id="password"
+                                        class="form-control"></label>
+                            </div>
+                            <a href="" class="btn" type="submit">Registrarse</a>
+                        </form>
+                    </div>
+                    <div class="dropdown">
+                        <button class="dropdown-toggle buttonLogin" type="button" data-bs-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false"><i class="bi bi-person-circle"></i>Iniciar
+                            sesión</button>
+                        <div class="dropdown-menu box_form_login" aria-labelledby="dropdownMenuButton">
+                            <form action="" class="form-control form_login">
+                                <div class="username">
+                                    <label for="username">Documento: <input type="text" id="documento"
+                                            class="form-control"></label>
+                                </div>
+                                <div class="password">
+                                    <label for="password">Contraseña: <input id="password" type="password"
+                                            class="form-control"></label>
+                                </div>
+                                <a href="" class="btn" type="submit">Iniciar</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="container-fluid carrusel">
+            <div id="carouselExample" class="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="" class="d-block" alt="Catálogo">
+                        <div class="carousel redirec1">
+                            <h3><a href="./img/catalogo.png" class="redirec"> Click aquí para conocerlo...</a></h3>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="./img/sobre.png" class="d-block" alt="Sobre_Nosotros">
+                        <div class="carousel redirec1">
+                            <h3><a href="" class="redirec"> Click aquí para saber más...</a></h3>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="./img/solicitudes.png" class="d-block" alt="...">
+                        <div class="carousel redirec1">
+                            <h3><a href="" class="redirec"> Radica tu solicitud...</a></h3>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="false"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+        <div class="noticias">
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                <div class="col">
+                    <div class="card mb-3" style="max-width: 540px;">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img src="./img/reciclaje.jpg" class="img-fluid rounded-start mt-4" alt="..."
+                                    style="height: 120px;">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">¿Por qué es importante reciclar?</h5>
+                                    <p class="card-text">En 2022 gracias al reciclaje de las más de 1,6 millones de
+                                        toneladas de envases, se ahorró el consumo de 21,46 millones de m3 de agua.</p>
+                                    <a href="https://www.ecoembes.com/es/reduce-reutiliza-y-recicla/beneficios-de-reciclar#:~:text=%C2%BFPor%20qu%C3%A9%20reciclando%20ayudas%20al,los%20recursos%20naturales%20del%20planeta."
+                                        target="_blank" style="text-decoration: none; color:#3a6317;">Conoce más
+                                        aquí...</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card mb-3" style="max-width: 540px;">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img src="./img/economia.png" class="img-fluid rounded-start mt-4" alt="..."
+                                    style="height: 120px;">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">¿Qué es la economía circular?</h5>
+                                    <p class="card-text">Modelo de producción y consumo que implica reutilizar, reparar
+                                        y reciclar materiales y productos para darles un valor añadido.</p>
+                                    <a href="https://www.europarl.europa.eu/topics/es/article/20151201STO05603/economia-circular-definicion-importancia-y-beneficios"
+                                        target="_blank" style="text-decoration: none; color:#3a6317;">Conoce más
+                                        aquí...</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="row">
+            <div class="col-sm-4">
+                <img src="./img/Logo_green3.png" alt="" style="width: 110px; height:100px;">
+            </div>
+            <div class="col-sm-4">
+                <ul>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+            <div class="col-sm-4">
+                <ul>
+                    <li>Contactanos</li>
+                    <li></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

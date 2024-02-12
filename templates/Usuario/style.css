@@ -1,0 +1,199 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url(../img/hojas.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow-x: hidden; 
+}
+
+nav {
+    width: 100.9%;
+}
+
+.firts_box {
+    display: flex;
+    justify-content: space-between;
+    width: auto;
+    height: 70px;
+    border-bottom: solid 1px #3a6317;
+    background-color: white;
+}
+
+.box_title {
+    padding: 25px 0;
+}
+
+.title {
+    margin-left: 20px;
+    font-size: 20px;
+    color: #3a6317;
+}
+
+.boxLenguaje {
+    padding: 10px;
+}
+
+.box_lenguaje_register_login {
+    display: flex;
+    width: 50%;
+    padding: 10px;
+}
+
+.buttonRegister {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: white;
+    border: solid 1px #3a6317;
+    outline: none;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+    border-radius: 30px;
+    width: 200px;
+    height: 50px;
+    color: #3a6317;
+    margin-right: 4px;
+}
+
+.buttonRegister i {
+    font-size: 2rem;
+}
+
+.buttonRegister:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.dropdown-toggle::after {
+    display: none;
+}
+
+.buttonLogin {
+    transition: box-shadow 0.3s ease;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: white;
+    border: solid 1px #3a6317;
+    border-radius: 30px;
+    width: 200px;
+    height: 50px;
+    color: #3a6317;
+}
+
+.buttonLogin:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.buttonLogin i {
+    font-size: 2rem;
+}
+.box_form_register {
+    padding: 5px;
+}
+
+.form_register {
+    width: 250px;
+}
+
+.form_register a {
+    background-color: #3a6317;
+    border: solid 1px #3a6317;
+    border-radius: 30px;
+    margin: 5px 50px;
+    color: white;
+    width: 120px;
+}
+
+.box_form_login {
+    padding: 5px;
+}
+
+.form_login {
+    width: 250px;
+}
+
+.form_login a {
+    background-color: #3a6317;
+    border: solid 1px #3a6317;
+    border-radius: 30px;
+    margin: 5px 60px;
+    color: white;
+    width: 100px;
+}
+
+.username {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+.email {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+.password {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+.Typedoc {
+    margin-top: 10px;
+}
+
+
+.carrusel {
+    margin-top: 1%;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.carrusel img {
+    width: auto;
+    height: 500px;
+}
+
+.carrusel button {
+    top: 100%;
+    width: 50%;
+    height: 50px;
+    background-color: #3a6317;
+}
+
+.noticias {
+    margin: 7.5%;
+}
+
+footer {
+    margin: 0;
+    height: 120px;
+    width: 100.9%;
+    border-top: solid 1px rgb(0, 0, 0);
+    background-color: #3a6317;
+}
+
+footer img {
+    margin: 2% 9% 0.5%;
+}
+
+.redirec1 {
+    margin: 0%;
+    height: 100%;
+    text-align: center;
+    background-color:#3a6317; 
+}
+
+.redirec {
+    text-decoration: none; 
+    color: white;
+}
+
+.redirec:hover {
+    text-decoration: none; 
+    color: #020500;
+    cursor: pointer;
+}
