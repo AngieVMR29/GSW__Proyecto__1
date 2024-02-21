@@ -56,7 +56,7 @@ nav {
 }
 
 .a {
-    margin-left: 20%;
+    margin-left: 10%;
 }
 
 
@@ -64,16 +64,15 @@ nav {
     padding: 25px 0;
 }
 
-.title {
+.title{
     margin-left: 20px;
     font-size: 20px;
     color: #3a6317;
 }
 
-.title {
-    margin-left: 20px;
-    font-size: 20px;
-    color: #3a6317;
+
+.title i {
+    font-size: 22px;
 }
 
 .boxLenguaje {
@@ -198,6 +197,7 @@ nav {
     margin-left: 1%;
     width: 100%;
     height: 350px;
+    background-color: white;
 }
 
 
@@ -232,5 +232,12 @@ footer img {
 .redirec:hover {
     text-decoration: none; 
     color: #020500;
-    cursor: pointer;
+    cursor: pointer
+}
+
+
+.politicas  i {
+    color: #3a6317;
+    font-size: 100px;
+    text-align: center;
 }
