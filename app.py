@@ -13,18 +13,13 @@ mysql = MySQL(app)
 
 @app.route('/')
 def home():
-    return render_template("./usuario/inicio.html")    
+    return render_template('/inicio.html')
 
-
-@app.route('/login')
-def login():
-    return render_template("./login/login.html")
-    
-    
-@app.route('/inicio')
-def inicio():
-    return render_template("./comprador/inicio.html")
-
+@app.route('/buscar', methods=['GET'])
+def buscar():
+    query = request.args.get('q')
+    return render_template('resultados_busqueda.html', query=query, resultados=resultados)
 
 if __name__ == '__main__':
+    app.secret_key = "Hola1234."
     app.run(debug=True)
