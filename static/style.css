@@ -202,7 +202,7 @@ nav {
 
 
 .noticias {
-    margin: 7.5%;
+    margin: 5%;
 }
 
 footer {
@@ -241,3 +241,14 @@ footer img {
     font-size: 100px;
     text-align: center;
 }
+
+.categorias {
+    margin-left: 8%;
+    text-align: center;
+    margin-top: 1%;
+    background-color: white;
+    width: 80%;
+    border-radius: 2%;
+    border: solid 0.1px rgb(179, 177, 177);
+}
+
