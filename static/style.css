@@ -200,9 +200,18 @@ nav {
     background-color: white;
 }
 
+.carrusel img {
+    margin-top: 2%;
+    margin-left: 12%;
+    height: 300px;
+    width: 980px;
+    background-color: white;
+}
+
 
 .noticias {
-    margin: 5%;
+    margin-top: 1%;
+    margin-left: 4%;
 }
 
 footer {
@@ -243,7 +252,7 @@ footer img {
 }
 
 .categorias {
-    margin-left: 8%;
+    margin-left: 8.2%;
     text-align: center;
     margin-top: 1%;
     background-color: white;
