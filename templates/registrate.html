@@ -1,22 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/style.css">
-    <title>Registrate</title>
-</head>
-<body>
-    <header>
-        <div class="logo">
-            <img src="../Noticias/assets/img/Logo_green3.png" alt="" width="80" height="90">
+{% extends 'inicio.html' %}
+{% block title %}Registrate{% endblock %}
+
+{% block botones %}
+    <h1></h1>
+{% endblock %}
+
+{% block cuerpo %}
+
+    <div class="container-fluid" style="width: 22%; height: 100%; margin-top: 2%; margin-bottom: 3%;">
+    <form action="" class="form-control form_register">
+        <h2 style="color: #3a6317;"> Registrate </h2>
+        <div class="name">
+            <label for="">Nombres: <input type="text" id="nombres" class="form-control"></label>
         </div>
-        <nav>
-            <a href="../Usuario/inicio.html">
-                <button class="btn-azul"><strong>Inicio</strong></button>
-            </a>
-        </nav>   
-    </header>
-    
-</body>
-</html>
+        <div class="lastname">
+            <label for="">Apellidos: <input type="text" id="apellidos" class="form-control"></label>
+        </div>
+        <div class="Typedoc">
+            <label for=""> Tipo de documento:
+                <select class="form-select" style="width: 208px;">
+                    <option value="1"> Seleccione </option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                </select></label>
+        </div>
+        <div class="Doc">
+            <label for="">Número de documento: <input type="int" id="documento"
+                    class="form-control"></label>
+        </div>
+        <div class="password">
+            <label for="">Contraseña: <input type="password" id="password"
+                    class="form-control"></label>
+        </div>
+        <a href="" class="btn_reg" type="submit">Registrate</a> <br>
+        <a href="/iniciogsw" style="color: #3a6317; text-decoration: none;">¿Ya tienes cuenta? <br> Inicia sesión </a>
+    </form>
+
+</div>
+
+{% endblock %}

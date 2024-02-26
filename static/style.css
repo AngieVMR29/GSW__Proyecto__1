@@ -1,14 +1,14 @@
 body {
     margin: 0;
     padding: 0;
-    background-image: url(../img/hojas.jpg);
+    background-image: url(../static/img/hojas.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     overflow-x: hidden; 
 }
 
 nav {
-    width: 100.9%;
+    width: 100%;
 }
 
 .firts_box {
@@ -75,6 +75,15 @@ nav {
     font-size: 22px;
 }
 
+.titlefooter {
+    margin-left: 20px;
+    font-size: 20px;
+    color: white;
+}
+.titlefooter i {
+    font-size: 22px;
+}
+
 .boxLenguaje {
     padding: 10px;
 }
@@ -87,7 +96,7 @@ nav {
 
 .buttonRegister {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
     background-color: white;
     border: solid 1px #3a6317;
@@ -99,32 +108,34 @@ nav {
     height: 50px;
     color: #3a6317;
     margin-right: 4px;
+    text-decoration: none;
 }
 
+.buttonLogin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border: solid 1px #3a6317;
+    outline: none;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+    border-radius: 30px;
+    width: 200px;
+    height: 50px;
+    color: #3a6317;
+    margin-right: 4px;
+    text-decoration: none;
+}
 .buttonRegister i {
     font-size: 2rem;
+    margin-right: 5px;
 }
 
 .buttonRegister:hover {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-.dropdown-toggle::after {
-    display: none;
-}
-
-.buttonLogin {
-    transition: box-shadow 0.3s ease;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    background-color: white;
-    border: solid 1px #3a6317;
-    border-radius: 30px;
-    width: 200px;
-    height: 50px;
-    color: #3a6317;
-}
 
 .buttonLogin:hover {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
@@ -132,39 +143,66 @@ nav {
 
 .buttonLogin i {
     font-size: 2rem;
-}
-.box_form_register {
-    padding: 5px;
+    margin-right: 5px;
 }
 
 .form_register {
-    width: 250px;
-}
-
-.form_register a {
     background-color: #3a6317;
     border: solid 1px #3a6317;
     border-radius: 30px;
     margin: 5px 50px;
     color: white;
     width: 120px;
+    text-align: center;
 }
 
-.box_form_login {
-    padding: 5px;
+
+.btn_reg {
+    background-color: #3a6317;
+    border: solid 1px #3a6317;
+    border-radius: 30px;
+    margin-top: 4%;
+    color: white;
+    width: 130px;
+    height: 35px;
+    padding: 3px;
+    text-decoration: none;
 }
 
-.form_login {
-    width: 250px;
+.btn_reg:hover {
+    color: #3a6317;
+    background-color: white;
+    cursor: pointer;
 }
 
-.form_login a {
+.btn-login {
+    background-color: #3a6317;
+    border: solid 1px #3a6317;
+    border-radius: 30px;
+    margin-top: 4%;
+    color: white;
+    width: 130px;
+    height: 35px;
+    padding: 3px;
+    text-align: center;
+    text-decoration: none;
+
+}
+
+.btn-login:hover {
+    color: #3a6317;
+    background-color: white;
+    cursor: pointer;
+}
+
+.form_login{
     background-color: #3a6317;
     border: solid 1px #3a6317;
     border-radius: 30px;
     margin: 5px 60px;
     color: white;
     width: 100px;
+    text-align: center;
 }
 
 .username {
@@ -214,16 +252,42 @@ nav {
     margin-left: 4%;
 }
 
-footer {
-    margin: 0;
-    height: 120px;
-    width: 100.9%;
-    border-top: solid 1px rgb(0, 0, 0);
+.site-footer {
+    padding-top: 3%;
+    width: 100%;
+    height: 7%;
     background-color: #3a6317;
+    text-align: center;
 }
 
-footer img {
-    margin: 2% 9% 0.5%;
+.site-footer h4 {
+    color: white;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.site-footer p {
+    color: #666;
+    font-size: 14px;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    display: inline;
+    margin-right: 10px;
+}
+
+.footer-links li a {
+    color: #666;
+    text-decoration: none;
+}
+
+.footer-links li a:hover {
+    color: #333;
 }
 
 .redirec1 {

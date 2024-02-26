@@ -15,6 +15,14 @@ mysql = MySQL(app)
 def home():
     return render_template('/inicio.html')
 
+@app.route('/registrogsw')
+def registrogsw():
+    return render_template('/registrate.html')
+
+@app.route('/iniciogsw')
+def iniciogsw():
+    return render_template('/inicios.html')
+
 @app.route('/buscar', methods=['GET'])
 def buscar():
     query = request.args.get('q')
