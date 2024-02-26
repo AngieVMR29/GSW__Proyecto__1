@@ -1,0 +1,349 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 22-02-2024 a las 22:17:42
+-- Versión del servidor: 10.4.28-MariaDB
+-- Versión de PHP: 8.0.28
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de datos: `greensoftworld`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `asignacion_roles`
+--
+
+CREATE TABLE `asignacion_roles` (
+  `id_roles_fk` int(11) NOT NULL,
+  `id_Persona1_FK` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `asignacion_roles`
+--
+
+INSERT INTO `asignacion_roles` (`id_roles_fk`, `id_Persona1_FK`) VALUES
+(1, 1),
+(3, 2),
+(4, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `categoria`
+--
+
+CREATE TABLE `categoria` (
+  `ID_Categoria_de_Residuo` int(11) NOT NULL,
+  `Nombre_de_Categoria` mediumtext NOT NULL,
+  `Estado_Categoria` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `chat`
+--
+
+CREATE TABLE `chat` (
+  `id_mensaje` int(11) NOT NULL,
+  `usuario` int(11) NOT NULL,
+  `mensaje` longtext NOT NULL,
+  `fecha_mensaje` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `estado_mensaje` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `compra`
+--
+
+CREATE TABLE `compra` (
+  `id_compra` int(11) NOT NULL,
+  `publicacion` int(11) NOT NULL,
+  `comprador` int(11) NOT NULL,
+  `estado_compra` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `persona`
+--
+
+CREATE TABLE `persona` (
+  `Id_Persona` int(11) NOT NULL,
+  `Nombres` varchar(250) NOT NULL,
+  `Apellidos` varchar(250) NOT NULL,
+  `Documento` int(230) NOT NULL,
+  `Tipo_Doc` int(11) NOT NULL,
+  `Email` varchar(350) NOT NULL,
+  `Password` varchar(200) NOT NULL,
+  `direccion` varchar(250) NOT NULL,
+  `foto` longblob NOT NULL,
+  `estado` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `persona`
+--
+
+INSERT INTO `persona` (`Id_Persona`, `Nombres`, `Apellidos`, `Documento`, `Tipo_Doc`, `Email`, `Password`, `direccion`, `foto`, `estado`) VALUES
+(1, 'Administrador', 'Prueba', 11, 1, 'administrador@gmail.com', 'Administrador.', '', '', 0),
+(2, 'Usuario', 'Prueba', 12, 1, 'usuarioprueba@gmail.com', 'Usuario1.', '', '', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `publicacion`
+--
+
+CREATE TABLE `publicacion` (
+  `id_publicacion` int(11) NOT NULL,
+  `Nombre_Publicacion` varchar(250) NOT NULL,
+  `Descripcion_Publicacion` mediumtext NOT NULL,
+  `Foto1_Publicacion` longblob NOT NULL,
+  `Foto2_Publicacion` longblob NOT NULL,
+  `Foto3_Publicacion` longblob NOT NULL,
+  `Categoria_Publicacion` int(11) NOT NULL,
+  `Propietario` int(11) NOT NULL,
+  `Estado_Publicacion` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `roles`
+--
+
+CREATE TABLE `roles` (
+  `Id_Roles` int(11) NOT NULL,
+  `Nombre_Rol` varchar(100) NOT NULL,
+  `Estado_Rol` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `roles`
+--
+
+INSERT INTO `roles` (`Id_Roles`, `Nombre_Rol`, `Estado_Rol`) VALUES
+(1, 'Administrador', 1),
+(2, 'Moderador', 1),
+(3, 'Comprador', 1),
+(4, 'Vendedor', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `solicitudes`
+--
+
+CREATE TABLE `solicitudes` (
+  `id_solicitudes` int(11) NOT NULL,
+  `asunto_solicitud` varchar(150) NOT NULL,
+  `Descripcion_Solicitud` mediumtext NOT NULL,
+  `Solicitante` int(11) NOT NULL,
+  `Estado_Solicitudes` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipo_documento`
+--
+
+CREATE TABLE `tipo_documento` (
+  `Id_Tipo_de_Documento` int(11) NOT NULL,
+  `Tipo_de_documento` varchar(100) NOT NULL,
+  `Estado_TD` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tipo_documento`
+--
+
+INSERT INTO `tipo_documento` (`Id_Tipo_de_Documento`, `Tipo_de_documento`, `Estado_TD`) VALUES
+(1, 'CC', 1),
+(2, 'CE', 1),
+(3, 'NIT', 1);
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `asignacion_roles`
+--
+ALTER TABLE `asignacion_roles`
+  ADD KEY `id_Persona_FK` (`id_Persona1_FK`),
+  ADD KEY `id_rol_fk` (`id_roles_fk`);
+
+--
+-- Indices de la tabla `categoria`
+--
+ALTER TABLE `categoria`
+  ADD PRIMARY KEY (`ID_Categoria_de_Residuo`);
+
+--
+-- Indices de la tabla `chat`
+--
+ALTER TABLE `chat`
+  ADD PRIMARY KEY (`id_mensaje`),
+  ADD KEY `usuario` (`usuario`);
+
+--
+-- Indices de la tabla `compra`
+--
+ALTER TABLE `compra`
+  ADD PRIMARY KEY (`id_compra`),
+  ADD KEY `publicacion` (`publicacion`),
+  ADD KEY `comprador` (`comprador`);
+
+--
+-- Indices de la tabla `persona`
+--
+ALTER TABLE `persona`
+  ADD PRIMARY KEY (`Id_Persona`),
+  ADD KEY `Tipo_Doc` (`Tipo_Doc`);
+
+--
+-- Indices de la tabla `publicacion`
+--
+ALTER TABLE `publicacion`
+  ADD PRIMARY KEY (`id_publicacion`),
+  ADD KEY `id_categoria` (`Categoria_Publicacion`),
+  ADD KEY `id_vendedor` (`Propietario`);
+
+--
+-- Indices de la tabla `roles`
+--
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`Id_Roles`);
+
+--
+-- Indices de la tabla `solicitudes`
+--
+ALTER TABLE `solicitudes`
+  ADD PRIMARY KEY (`id_solicitudes`),
+  ADD KEY `solicitante` (`Solicitante`);
+
+--
+-- Indices de la tabla `tipo_documento`
+--
+ALTER TABLE `tipo_documento`
+  ADD PRIMARY KEY (`Id_Tipo_de_Documento`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `categoria`
+--
+ALTER TABLE `categoria`
+  MODIFY `ID_Categoria_de_Residuo` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `chat`
+--
+ALTER TABLE `chat`
+  MODIFY `id_mensaje` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `compra`
+--
+ALTER TABLE `compra`
+  MODIFY `id_compra` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `persona`
+--
+ALTER TABLE `persona`
+  MODIFY `Id_Persona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `publicacion`
+--
+ALTER TABLE `publicacion`
+  MODIFY `id_publicacion` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `roles`
+--
+ALTER TABLE `roles`
+  MODIFY `Id_Roles` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de la tabla `solicitudes`
+--
+ALTER TABLE `solicitudes`
+  MODIFY `id_solicitudes` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `tipo_documento`
+--
+ALTER TABLE `tipo_documento`
+  MODIFY `Id_Tipo_de_Documento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `asignacion_roles`
+--
+ALTER TABLE `asignacion_roles`
+  ADD CONSTRAINT `id_Persona_FK` FOREIGN KEY (`id_Persona1_FK`) REFERENCES `persona` (`Id_Persona`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `id_rol_fk` FOREIGN KEY (`id_roles_fk`) REFERENCES `roles` (`Id_Roles`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `chat`
+--
+ALTER TABLE `chat`
+  ADD CONSTRAINT `usuario` FOREIGN KEY (`usuario`) REFERENCES `persona` (`Id_Persona`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `compra`
+--
+ALTER TABLE `compra`
+  ADD CONSTRAINT `comprador` FOREIGN KEY (`comprador`) REFERENCES `asignacion_roles` (`id_Persona1_FK`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `publicacion` FOREIGN KEY (`publicacion`) REFERENCES `publicacion` (`id_publicacion`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `persona`
+--
+ALTER TABLE `persona`
+  ADD CONSTRAINT `Tipo_Doc` FOREIGN KEY (`Tipo_Doc`) REFERENCES `tipo_documento` (`Id_Tipo_de_Documento`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `publicacion`
+--
+ALTER TABLE `publicacion`
+  ADD CONSTRAINT `id_categoria` FOREIGN KEY (`Categoria_Publicacion`) REFERENCES `categoria` (`ID_Categoria_de_Residuo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `id_vendedor` FOREIGN KEY (`Propietario`) REFERENCES `asignacion_roles` (`id_Persona1_FK`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `solicitudes`
+--
+ALTER TABLE `solicitudes`
+  ADD CONSTRAINT `solicitante` FOREIGN KEY (`Solicitante`) REFERENCES `persona` (`Id_Persona`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

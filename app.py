@@ -15,8 +15,11 @@ mysql = MySQL(app)
 def home():
     return render_template('/inicio.html')
 
-@app.route('/registrogsw')
+@app.route('/registrogsw', methods = ["GET", "POST"])
 def registrogsw():
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM tip_usu")
+    tipo = cur.fetchall()
     return render_template('/registrate.html')
 
 @app.route('/iniciogsw')
