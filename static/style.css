@@ -146,14 +146,38 @@ nav {
     margin-right: 5px;
 }
 
-.form_register {
-    background-color: #3a6317;
-    border: solid 1px #3a6317;
-    border-radius: 30px;
-    margin: 5px 50px;
-    color: white;
-    width: 120px;
+.form_login {
+    margin-top: 4%;
+    margin-bottom: 8%;
+    margin-left:  35%;
+    background-color: white;
+    width: 300px;
+    height: 330px;
+    border: solid 0.2px #befc88;
     text-align: center;
+    h2 {
+        margin-top: 3%;
+        color:#3a6317;
+    }
+    a {
+        text-decoration: none;
+        color: #3a6317;
+    }
+}
+
+.form label{
+    color: #3a6317;
+    font-weight: bold;
+    display: block;
+    font-size: 15px;
+}
+
+.form-input {
+    border: solid 0.2px #befc88;
+    margin-top: 5%;
+    height: 35px;
+    width: 92%;
+    border-radius: 5px;
 }
 
 
@@ -162,6 +186,7 @@ nav {
     border: solid 1px #3a6317;
     border-radius: 30px;
     margin-top: 4%;
+    margin-bottom: 4%;
     color: white;
     width: 130px;
     height: 35px;
@@ -180,6 +205,7 @@ nav {
     border: solid 1px #3a6317;
     border-radius: 30px;
     margin-top: 4%;
+    margin-bottom: 4%;
     color: white;
     width: 130px;
     height: 35px;
@@ -193,38 +219,6 @@ nav {
     color: #3a6317;
     background-color: white;
     cursor: pointer;
-}
-
-.form_login{
-    background-color: #3a6317;
-    border: solid 1px #3a6317;
-    border-radius: 30px;
-    margin: 5px 60px;
-    color: white;
-    width: 100px;
-    text-align: center;
-}
-
-.username {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 10px;
-}
-
-.email {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 10px;
-}
-
-.password {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 10px;
-}
-
-.Typedoc {
-    margin-top: 10px;
 }
 
 

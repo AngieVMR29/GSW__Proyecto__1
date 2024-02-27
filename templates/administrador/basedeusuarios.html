@@ -1,0 +1,31 @@
+{% extends './administrador/administrador.html' %}
+{% block title %} Base De Usuarios {% endblock %}
+{% block cuerpo %}
+<form action="" method="GET"></form>
+
+<table>
+    <thead>
+        <tr>
+            <td>Nombres</td>
+            <td>Apellidos</td>
+            <td>Email</td>
+            <td>Documento</td>
+            <td>operaciones</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for persona in personas %}
+            <tr>
+                <td>{{ persona.Nombres }}</td>
+                <td>{{ persona.Apellidos }}</td>
+                <td>{{ persona.Email }}</td>
+                <td>{{ persona.Documento }}</td>
+                <td>
+                    <a href="Editar/{{ persona.Id_Persona }}">Editar usuario</a>
+                    <a href="Eliminar/{{ persona.Id_Persona }}">Eliminar usuario</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

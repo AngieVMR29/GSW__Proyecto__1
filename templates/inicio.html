@@ -13,6 +13,7 @@
 </head>
 
 <body>
+    {% block nav %}
     <nav>
         <div class="contaier-fluid main_container">
             <div class="row-auto firts_box">
@@ -50,6 +51,7 @@
             </div>
         </div>
     </nav>
+    {% endblock %} 
     {% block cuerpo %}
     <div class="container-fluid">
         <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">

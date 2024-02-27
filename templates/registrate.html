@@ -18,10 +18,11 @@
         </div>
         <div class="Typedoc">
             <label for=""> Tipo de documento:
-                <select class="form-select" style="width: 208px;">
-                    <option value="1"> Seleccione </option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                <select class="form-select" style="width: 208px;" name="tipo">
+                    <option value="0">           </option>
+                    {% for tip in tipo %}
+                    <option value="{{tip.Id_Tipo_de_Documento}}">{{ tip.Tipo_de_documento }}</option>
+                    {% endfor %}
                 </select></label>
         </div>
         <div class="Doc">
