@@ -20,8 +20,8 @@
             <label for=""> Tipo de documento:
                 <select class="form-select" style="width: 208px;" name="tipo">
                     <option value="0">           </option>
-                    {% for tip in tipo %}
-                    <option value="{{tip.Id_Tipo_de_Documento}}">{{ tip.Tipo_de_documento }}</option>
+                    {% for tipo in tipos %}
+                    <option value="{{tipo.Id_Tipo_de_Documento}}">{{ tipo.Tipo_de_documento }}</option>
                     {% endfor %}
                 </select></label>
         </div>

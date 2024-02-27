@@ -1,7 +1,20 @@
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+    <p>{{ message }}</p>
+{% endfor %}
+{% endif %}
+{% endwith%}
 {% extends './administrador/administrador.html' %}
 {% block title %} Base De Usuarios {% endblock %}
 {% block cuerpo %}
-<form action="" method="GET"></form>
+<form action="" method="POST">
+    <h2> Ceación de usuario </h2>
+    <input type="text" placeholder="Nombres: " name="Nombres">
+    <input type="text" placeholder="Apellidos: " name="Apellidos">
+    <button type="submit"></button>
+
+</form>
 
 <table>
     <thead>
@@ -21,8 +34,8 @@
                 <td>{{ persona.Email }}</td>
                 <td>{{ persona.Documento }}</td>
                 <td>
-                    <a href="Editar/{{ persona.Id_Persona }}">Editar usuario</a>
-                    <a href="Eliminar/{{ persona.Id_Persona }}">Eliminar usuario</a>
+                    <a href="editar/{{ persona.Id_Persona }}">Editar usuario</a>
+                    <a href="eliminar/{{ persona.Id_Persona }}">Eliminar usuario</a>
                 </td>
             </tr>
         {% endfor %}

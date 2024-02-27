@@ -1,4 +1,4 @@
-from flask import Flask,  render_template, request, redirect, url_for, session # pip install Flask
+from flask import Flask,  render_template, request, redirect, url_for, session, flash # pip install Flask
 from flask_mysqldb import MySQL,MySQLdb # pip install Flask-MySQLdb
 from os import path #pip install notify-py
 from notifypy import Notify
@@ -22,11 +22,7 @@ def registrogsw():
     cur.execute("SELECT * FROM tipo_documento")
     tipo = cur.fetchall()
 
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM roles")
-    interes = cur.fetchall()
-    cur.close()
-    return render_template('/registrate.html')
+    return render_template('/registrate.html', tipos = tipo)
 
 
 @app.route('/iniciogsw', methods =['POST', 'GET'])
@@ -73,8 +69,24 @@ def basedeusuarios():
         cur = mysql.connection.cursor()
         cur.execute('SELECT * FROM persona')
         persona = cur.fetchall()
-        print(persona)
         return render_template('administrador/basedeusuarios.html', personas = persona)
+
+@app.route('/eliminar/<string:id>')
+def eliminar_persona(id):
+        cur = mysql.connection.cursor()
+        cur.execute('DELETE * FROM persona WHERE Id_Persona = %s',(id,))
+        cur.connection.commit()
+        flash('contacto eliminado exitosamente')
+        return redirect(url_for('basedeusuarios'))
+
+
+@app.route('/editar/<string:id>')
+def editar_persona(id):
+    cur = mysql.connection.cursor()
+    cur.execute('SELECT * FROM persona WHERE Id_Persona = %s',(id,))
+    persona = cur.fetchall()
+    print(persona[0])
+    return 'recibido'
 
 @app.route('/basedepublicaciones', methods=['GET','POST'])
 def basedepublicaciones():
@@ -92,4 +104,4 @@ def buscar():
 
 if __name__ == '__main__':
     app.secret_key = "Hola1234."
-    app.run(debug=True)
+    app.run(port=3000 ,debug=True)
