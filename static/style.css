@@ -175,6 +175,7 @@ nav {
 .form-input {
     border: solid 0.2px #befc88;
     margin-top: 5%;
+    margin-bottom: 1%;
     height: 35px;
     width: 92%;
     border-radius: 5px;
@@ -187,11 +188,13 @@ nav {
     border-radius: 30px;
     margin-top: 4%;
     margin-bottom: 4%;
+    margin-left: 19%;
     color: white;
     width: 130px;
     height: 35px;
     padding: 3px;
     text-decoration: none;
+    text-align: center;
 }
 
 .btn_reg:hover {
@@ -317,5 +320,43 @@ nav {
     width: 80%;
     border-radius: 2%;
     border: solid 0.1px rgb(179, 177, 177);
+}
+
+.creacion {
+    display: flex;
+} 
+
+.tabla_u {
+    background-color: white;
+    margin-top: 5%;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 5%;
+}
+
+.tabla_u table {
+    width: 100%;
+    border: 1px solid #3a6317;
+    border-collapse: collapse;
+}
+
+.tabla_u th,
+.tabla_u td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #3a6317;
+}
+
+.tabla_u th {
+    background-color: #cde6b7;
+}
+
+
+.tabla_u a {
+    margin-right: 5px;
+}
+
+.tabla_u a:hover {
+    background-color: #99b198;
 }
 

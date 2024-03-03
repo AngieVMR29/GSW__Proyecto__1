@@ -1,0 +1,48 @@
+{% extends './administrador/administrador.html' %}
+{% block title %} Crear usuario {% endblock %}
+{% block cuerpo %}
+<div class="container-fluid" style="width: 22%; height: 100%; margin-top: 2%; margin-bottom: 3%;">
+    <form action="/crearusuario" class="form-control" method="post" enctype="multipart/form-data">
+        <h2 style="color: #3a6317;"> Crear usuario </h2>
+        <div class="form-group">
+            <label for="">Nombres: <input type="text" id="Nombres" class="form-input" name="Nombres"></label>
+        </div>
+        <div class="form-group">
+            <label for="">Apellidos: <input type="text" id="Apellidos" class="form-input" name="Apellidos"></label>
+        </div>
+        <div class="form-group">
+            <label for=""> Tipo de documento:
+                <select class="form-input"style="width: 208px;" name="tipo">
+                    <option value="0">           </option>
+                    {% for tipo in tipos %}
+                    <option value="{{tipo.Id_Tipo_de_Documento}}">{{ tipo.Tipo_de_documento }}</option>
+                    {% endfor %}
+                </select></label>
+        </div>
+        <div class="form-group">
+            <label for="">Número de documento: <input type="int" id="documento"
+                class="form-input" name="Documento"></label>
+        </div>
+        <div class="form-group">
+            <label for="">Email: <input type="email" id="email"
+                class="form-input" name="Email"></label>
+        </div>
+        <div class="form-group">
+            <label>Foto de perfil:</label>
+            <input type="file" class="form-input" name="foto" accept=".image/*">
+        </div>
+
+        <div class="form-group">
+            <label>Dirección:</label>
+            <input type="text" class="form-input" name="direccion">
+        </div>
+
+        <div class="form-group">
+            <label>Contraseña:</label>
+            <input type="password" class="form-input" name="Password">
+        </div>
+        <div class="form-group">
+            <button class="btn-login" type="submit">Crear usuario</button>
+        </div>
+</div>
+{% endblock %}
