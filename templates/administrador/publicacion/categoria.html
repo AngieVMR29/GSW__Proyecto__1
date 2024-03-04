@@ -1,0 +1,41 @@
+{% extends './administrador/administrador.html' %}
+{% block title %} Categoria {% endblock %}
+
+{% block cuerpo %}
+<div>
+    <div class="container-fluid" style="width: 22%; height: 100%; margin-top: 2%; margin-bottom: 3%;">
+        <form action="/categorias" class="form-control" method="post" enctype="multipart/form-data">
+            <h2 style="color: #3a6317;"> Crear categoria </h2>
+            <div class="form-group">
+                <label for="">Nombre Categoria: <input type="text" id="Nombres" class="form-input"
+                        name="Nombre_de_Categoria"></label>
+            </div>
+            <div class="form-group">
+                <button class="btn-login" type="submit">Crear Categorias</button>
+            </div>
+    </div>
+    <div class="container-fluid" style="width: 22%; height: 100%; margin-top: 2%; margin-bottom: 3%;">
+        <div class="tabla_u">
+            <table>
+                <thead>
+                    <tr>
+                        <td>Id Categoria</td>
+                        <td>Nombre de <br> categoria</td>
+                        <td>Operaciones</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for categoria in categorias %}
+                    <tr>
+                        <td>{{ categoria.ID_Categoria_de_Residuo }}</td>
+                        <td>{{ categoria.Nombre_de_Categoria }}</td>
+                        <td>
+                            <a href="eliminarcategorias/{{ categoria.ID_Categoria_de_Residuo }}">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endblock %}
