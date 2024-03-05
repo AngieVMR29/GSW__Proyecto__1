@@ -335,7 +335,7 @@ nav {
 }
 
 .tabla_u table {
-    width: 100%;
+    width: auto;
     border: 1px solid #3a6317;
     border-collapse: collapse;
 }

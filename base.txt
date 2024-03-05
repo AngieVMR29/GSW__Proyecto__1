@@ -93,6 +93,7 @@ CREATE TABLE `persona` (
   `Documento` int(230) NOT NULL,
   `Tipo_Doc` int(11) NOT NULL,
   `Email` varchar(350) NOT NULL,
+  `Telefono` int(11) NOT NULL,
   `Password` varchar(200) NOT NULL,
   `direccion` varchar(250) NOT NULL,
   `foto` longblob NOT NULL,

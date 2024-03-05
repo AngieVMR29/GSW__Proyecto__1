@@ -1,6 +1,12 @@
+from random import sample
 import random
 import string
 
-def stringAleatorio(length=14):
-    caracteres = string.ascii_letters + string.digits
-    return ''.join(random.choice(caracteres) for _ in range(length))
+def stringAleatorio():
+    #Generando string aleatorio
+    string_aleatorio = "0123456789abcdefghijklmnopqrstuvwxyz_"
+    longitud         = 20
+    secuencia        = string_aleatorio.upper()
+    resultado_aleatorio  = sample(secuencia, longitud)
+    string_aleatorio     = "".join(resultado_aleatorio)
+    return string_aleatorio

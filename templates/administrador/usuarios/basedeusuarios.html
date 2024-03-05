@@ -8,24 +8,37 @@
                 <tr>
                     <td>Nombres</td>
                     <td>Apellidos</td>
-                    <td>Email</td>
                     <td>Tipo de documento</td>
                     <td>Documento</td>
+                    <td>Email</td>
+                    <td>Telefono</td>
+                    <td>Dirección</td>
                     <td>Foto</td>
+                    <td>Roles</td>
                     <td>operaciones</td>
                 </tr>
             </thead>
             <tbody>
-                {% for persona, foto_codificada in datos %}
+                {% for persona in personas %}
                 <tr>
                     <td>{{ persona.Nombres }}</td>
                     <td>{{ persona.Apellidos }}</td>
-                    <td>{{ persona.Email }}</td>
                     <td>{{ persona.Tipo_Doc }}</td>
                     <td>{{ persona.Documento }}</td>
+                    <td>{{ persona.Email }}</td>
+                    <td>{{ persona.Telefono }}</td>
+                    <td>{{ persona.direccion }}</td>
+
+                    {% with urlPersona = '/static/uploads/' %}
                     <td>
-                        <img src="data:image/png;base64,{{ foto_codificada }}" alt="Foto">
+                        {% if(persona.foto =="") %}
+                        <img src="../../../static/uploads/sinfoto.png"  class="sin_foto_mini" alt="sinfoto">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='uploads/' + persona.foto.decode('utf-8') ) }}" class="sin_foto_mini" alt="{{ persona.Nombres }}" style="width: 50px; height: 50px; border-radius: 50%;">
+                        {% endif %}
                     </td>
+                    {% endwith %}
+                    <td>{{ persona.roles }}</td>
                     <td>
                         <a href="editar/{{ persona.Id_Persona }}">Editar usuario</a>
                         <a href="eliminar/{{ persona.Id_Persona }}">Eliminar usuario</a>
@@ -38,11 +51,13 @@
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     {% for message in messages %}
-       
-      <div class="alert alert-warning alert-dismissible fade show" role="alert" style="margin-left: 6%; margin-right: 6%; margin-bottom: 3%;">
-        <strong>¡Base modificada con exito!</strong> <p>{{ message }}</p>
+
+    <div class="alert alert-warning alert-dismissible fade show" role="alert"
+        style="margin-left: 6%; margin-right: 6%; margin-bottom: 3%;">
+        <strong>¡Base modificada con exito!</strong>
+        <p>{{ message }}</p>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
+    </div>
     {% endfor %}
     {% endif %}
     {% endwith %}

@@ -1,8 +1,10 @@
-from flask import Flask,  render_template, request, redirect, url_for, session, flash # pip install Flask
+from flask import Flask,  render_template, request, redirect, url_for, session, flash, send_file # pip install Flask
 from flask_mysqldb import MySQL,MySQLdb # pip install Flask-MySQLdb
 from random import sample
 from generador import stringAleatorio
-import os
+import os 
+from os import remove #Modulo  para remover archivo
+from os import path
 import base64
 from werkzeug.utils import secure_filename 
 from notifypy import Notify
@@ -21,6 +23,21 @@ mysql = MySQL(app)
 
 ALLOWED_EXTENSIONS = set(['png','jpg','jpeg','gif'])
 
+def recibeFoto(file):
+    print(file)
+    basepath = os.path.dirname (__file__) #La ruta donde se encuentra el archivo actual
+    filename = secure_filename(file.filename) #Nombre original del archivo
+
+    #capturando extensión del archivo ejemplo: (.png, .jpg, .pdf ...etc)
+    extension           = os.path.splitext(filename)[1]
+    nuevoNombreFile     = stringAleatorio() + extension
+    #print(nuevoNombreFile)
+        
+    upload_path = os.path.join (basepath, 'static/uploads', nuevoNombreFile) 
+    file.save(upload_path)
+
+    return nuevoNombreFile
+
 @app.route('/')
 def home():
     return render_template('/inicio.html')
@@ -28,9 +45,6 @@ def home():
 @app.route('/404')
 def not_found():
     return 'url no encontrada'
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.',1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/registrogsw', methods = ["GET", "POST"])
 def registrogsw():
@@ -85,18 +99,16 @@ def administrador():
 @app.route('/basedeusuarios')
 def basedeusuarios():
     cur = mysql.connection.cursor()
-    cur.execute('SELECT * FROM persona')
-    personas = cur.fetchall()
-    fotos_codificadas = []
-    
-    for persona in personas:
-        foto = persona['foto']
-        foto_codificada = base64.b64encode(foto).decode('utf-8')
-        fotos_codificadas.append(foto_codificada)
+    cur.execute('''
+        SELECT persona.*, GROUP_CONCAT(roles.Nombre_Rol SEPARATOR ', ') AS roles
+        FROM persona
+        LEFT JOIN asignacion_roles ON persona.Id_Persona = asignacion_roles.id_Persona1_FK
+        LEFT JOIN roles ON asignacion_roles.id_roles_fk = roles.Id_Roles
+        GROUP BY persona.Id_Persona
+    ''')
+    personas = cur.fetchall()        
+    return render_template('administrador/usuarios/basedeusuarios.html', personas=personas)
 
-    datos = zip(personas, fotos_codificadas)
-    print(fotos_codificadas)
-    return render_template('administrador/usuarios/basedeusuarios.html', datos=datos)
 
 
 @app.route('/crearusuario', methods=['GET','POST'])
@@ -105,6 +117,10 @@ def crear_persona():
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM tipo_documento")
     tipo = cur.fetchall()
+
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM roles")
+    roles = cur.fetchall()
     
     if request.method == 'POST':
         Nombres = request.form['Nombres']
@@ -112,27 +128,27 @@ def crear_persona():
         Tipo_Doc = request.form['tipo']
         Documento = request.form['Documento']
         Email = request.form['Email']
-        if 'file' not in request.files:
-            flash('no file part')
-        file = request.files['foto']
-        if file.filename == '':
-            flash('imagen no se ha seleccionado')
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            ruta = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(ruta)
-            flash('exit')
+        Telefono = request.form['Telefono']
+        if(request.files['foto'] !=''):
+            file     = request.files['foto'] #recibiendo el archivo
+            nuevoNombreFile = recibeFoto(file) 
 
         Password = request.form['Password']
         direccion = request.form['direccion']
 
         cur = mysql.connection.cursor()
-        cur.execute(" INSERT INTO persona (Nombres, Apellidos,Tipo_Doc, Documento, Email, Password, foto, direccion, estado) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)",(Nombres, Apellidos,Tipo_Doc, Documento, Email, Password,file,direccion,True))
+        cur.execute(" INSERT INTO persona (Nombres, Apellidos,Tipo_Doc, Documento, Email,Telefono, Password, foto, direccion, estado) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(Nombres, Apellidos,Tipo_Doc, Documento, Email,Telefono, Password,nuevoNombreFile,direccion,True))
         cur.connection.commit()
 
+        cur.execute("SELECT LAST_INSERT_ID()")
+        persona_id = cur.lastrowid
+        roles_seleccionados = request.form.getlist('roles[0]')
+        for rol_id in roles_seleccionados:
+            cur.execute("INSERT INTO asignacion_roles (id_roles_fk, id_Persona1_FK) VALUES (%s, %s)", (rol_id, persona_id))
+        mysql.connection.commit()
         flash('Persona creada exitosamente')
         return redirect(url_for('basedeusuarios'))
-    return render_template('administrador/usuarios/crearusuario.html',  tipos = tipo)
+    return render_template('administrador/usuarios/crearusuario.html',  tipos = tipo, roles = roles)
     
     
 
@@ -141,6 +157,7 @@ def eliminar_persona(id):
         cur = mysql.connection.cursor()
         cur.execute('DELETE FROM persona WHERE Id_Persona = %s',(id,))
         cur.connection.commit()
+        
         flash('Persona eliminada exitosamente')
         return redirect(url_for('basedeusuarios'))
 
