@@ -26,13 +26,9 @@ ALLOWED_EXTENSIONS = set(['png','jpg','jpeg','gif'])
 def recibeFoto(file):
     print(file)
     basepath = os.path.dirname (__file__) #La ruta donde se encuentra el archivo actual
-    filename = secure_filename(file.filename) #Nombre original del archivo
-
-    #capturando extensión del archivo ejemplo: (.png, .jpg, .pdf ...etc)
+    filename = secure_filename(file.filename) 
     extension           = os.path.splitext(filename)[1]
-    nuevoNombreFile     = stringAleatorio() + extension
-    #print(nuevoNombreFile)
-        
+    nuevoNombreFile     = stringAleatorio() + extension       
     upload_path = os.path.join (basepath, 'static/uploads', nuevoNombreFile) 
     file.save(upload_path)
 
@@ -45,6 +41,11 @@ def home():
 @app.route('/404')
 def not_found():
     return 'url no encontrada'
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('index'))
 
 @app.route('/catalogo')
 def catalogo():
