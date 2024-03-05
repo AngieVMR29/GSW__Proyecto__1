@@ -10,22 +10,24 @@
         </div>
         <div class="form-group" style="display: flex;">
             <label for=""> Tipo de documento:
-                <select class="form-input"style="width: 95%;" name="tipo">
-                    <option value="0">           </option>
+                <select class="form-input" style="width: 95%;" name="tipo">
+                    <option value="0"> </option>
                     {% for tipo in tipos %}
                     <option value="{{tipo.Id_Tipo_de_Documento}}">{{ tipo.Tipo_de_documento }}</option>
                     {% endfor %}
                 </select></label>
-                <label for="">Número de documento: <input type="int" id="documento"
-                    class="form-input" name="Documento" style="margin-left: 3%; margin-top: 3%;"></label>
+            <label for="">Número de documento: <input type="int" id="documento" class="form-input" name="Documento"
+                    style="margin-left: 3%; margin-top: 3%;"></label>
         </div>
-        <div class="form-group"  style="display: flex;">
+        <div class="form-group" style="display: flex;">
             <label for="">Email: <input type="email" id="email" class="form-input" name="Email"></label>
             <label> Telefono: <input type="text" class="form-input" name="Telefono"> </label>
         </div>
         <div class="form-group" style="display: flex;">
-            <label>Foto de perfil: <br> <input type="file" class="form-input" name="foto" accept=".image/*" style="width: 85%;"></label>
-            <label>Dirección: <input type="text" class="form-input" name="direccion" style=" width: 100%; margin-left: -10%;"> </label>
+            <label>Foto de perfil: <br> <input type="file" class="form-input" name="foto" accept=".image/*"
+                    style="width: 85%;"></label>
+            <label>Dirección: <input type="text" class="form-input" name="direccion"
+                    style=" width: 100%; margin-left: -10%;"> </label>
         </div>
 
         <div class="form-group">
@@ -34,15 +36,30 @@
         </div>
         <div class="form-group">
             <p> Roles:</p>
-                {% for role in roles %}
-
-                <div class="form-check">
-                    <input class="form-check-input" name="roles" type="checkbox" value="{{ role.Id_Roles }}" id="flexCheckIndeterminate {{ role.Id_Roles }}">
-                    <label class="form-check-label" for="flexCheckIndeterminate {{ role.Id_Roles }}">
-                        {{ role.Nombre_Rol }}
-                    </label>
-                  </div>
-                {% endfor %}
+            <div class="form-check">
+                <input class="form-check-input" name="roles[]" type="checkbox" value="1" id="flexCheckIndeterminate">
+                <label class="form-check-label" for="flexCheckIndeterminate">
+                    Administrador
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" name="roles[]" type="checkbox" value="2" id="flexCheckIndeterminate">
+                <label class="form-check-label" for="flexCheckIndeterminate">
+                    Moderador
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" name="roles[]" type="checkbox" value="3" id="flexCheckIndeterminate">
+                <label class="form-check-label" for="flexCheckIndeterminate">
+                    Comprador
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" name="roles[]" type="checkbox" value="4" id="flexCheckIndeterminate">
+                <label class="form-check-label" for="flexCheckIndeterminate">
+                    Vendedor
+                </label>
+            </div>
         </div>
         <div class="form-group">
             <button class="btn-login" type="submit">Crear usuario</button>

@@ -1,0 +1,31 @@
+{% extends 'inicio.html' %}
+{% block title %} Catálogo {% endblock %}
+{% block cuerpo %}
+
+<div style="display: flex;">
+
+    <div style="background-color: white; width: 20%; height: 100%;">
+    
+        <h3 style="margin-left: 4%; margin-top: 10%; margin-bottom: 10%; "> Filtros </h3> <br>
+        {% for catalogo in catalogos %}
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="{{catalogo.ID_Categoria_de_Residuo}}" id="flexCheckIndeterminate {{catalogo.ID_Categoria_de_Residuo}}">
+            <label class="form-check-label" for="flexCheckIndeterminate {{catalogo.ID_Categoria_de_Residuo}}">
+                {{catalogo.Nombre_de_Categoria}}"
+            </label>
+          </div>
+
+          {% endfor %}
+    </div>
+    <div>
+        <div>
+            <h2> Catálogo </h2>
+        </div>
+        <div>
+            
+        </div>
+
+
+    </div>
+</div>
+{% endblock %}

@@ -102,11 +102,6 @@ CREATE TABLE `persona` (
 
 --
 -- Volcado de datos para la tabla `persona`
---
-
-INSERT INTO `persona` (`Id_Persona`, `Nombres`, `Apellidos`, `Documento`, `Tipo_Doc`, `Email`, `Password`, `direccion`, `foto`, `estado`) VALUES
-(1, 'Administrador', 'Prueba', 11, 1, 'administrador@gmail.com', 'Administrador.', '', '', 0),
-(2, 'Usuario', 'Prueba', 12, 1, 'usuarioprueba@gmail.com', 'Usuario1.', '', '', 0);
 
 -- --------------------------------------------------------
 

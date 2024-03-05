@@ -46,12 +46,19 @@ def home():
 def not_found():
     return 'url no encontrada'
 
+@app.route('/catalogo')
+def catalogo():
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM categoria")
+    catalogo = cur.fetchall()
+
+    return render_template('/catalogo.html', catalogos = catalogo)
+
 @app.route('/registrogsw', methods = ["GET", "POST"])
 def registrogsw():
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM tipo_documento")
     tipo = cur.fetchall()
-    print(tipo)
 
     return render_template('/registrate.html', tipos = tipo)
 
@@ -100,10 +107,12 @@ def administrador():
 def basedeusuarios():
     cur = mysql.connection.cursor()
     cur.execute('''
-        SELECT persona.*, GROUP_CONCAT(roles.Nombre_Rol SEPARATOR ', ') AS roles
+        SELECT persona.*, GROUP_CONCAT(roles.Nombre_Rol SEPARATOR ', ') AS roles,
+        GROUP_CONCAT(tipo_documento.Tipo_de_documento SEPARATOR ', ') AS tipo_documento
         FROM persona
         LEFT JOIN asignacion_roles ON persona.Id_Persona = asignacion_roles.id_Persona1_FK
         LEFT JOIN roles ON asignacion_roles.id_roles_fk = roles.Id_Roles
+        LEFT JOIN tipo_documento ON persona.Tipo_Doc = tipo_documento.Id_Tipo_de_Documento
         GROUP BY persona.Id_Persona
     ''')
     personas = cur.fetchall()        
@@ -135,21 +144,24 @@ def crear_persona():
 
         Password = request.form['Password']
         direccion = request.form['direccion']
+        roles = request.form.getlist('roles[]')
 
         cur = mysql.connection.cursor()
         cur.execute(" INSERT INTO persona (Nombres, Apellidos,Tipo_Doc, Documento, Email,Telefono, Password, foto, direccion, estado) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(Nombres, Apellidos,Tipo_Doc, Documento, Email,Telefono, Password,nuevoNombreFile,direccion,True))
         cur.connection.commit()
 
         cur.execute("SELECT LAST_INSERT_ID()")
-        persona_id = cur.lastrowid
-        roles_seleccionados = request.form.getlist('roles[0]')
-        for rol_id in roles_seleccionados:
-            cur.execute("INSERT INTO asignacion_roles (id_roles_fk, id_Persona1_FK) VALUES (%s, %s)", (rol_id, persona_id))
-        mysql.connection.commit()
+        id_persona = cur.fetchone()['LAST_INSERT_ID()']
+
+        for role in roles:
+                cur.execute("INSERT INTO asignacion_roles (id_Persona1_FK, id_roles_fk) VALUES (%s, %s)", (id_persona, role))
+                mysql.connection.commit()
+
+        
         flash('Persona creada exitosamente')
         return redirect(url_for('basedeusuarios'))
     return render_template('administrador/usuarios/crearusuario.html',  tipos = tipo, roles = roles)
-    
+
     
 
 @app.route('/eliminar/<string:id>')
@@ -210,6 +222,13 @@ def eliminarcategorias(id):
 @app.route('/usuario', methods=['GET','POST'])
 def usuario():
     return render_template('usuario/usuario.html')
+
+@app.route('/crearpublicacion', methods=['GET','POST'])
+def crearpublicacion():
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM categoria")
+    categoria = cur.fetchall()
+    return render_template('usuario/crearpublicacion.html', categorias = categoria)
 
 
 @app.route('/buscar', methods=['GET','POST'])

@@ -1,0 +1,57 @@
+{% extends './usuario/usuario.html' %}
+{% block title %} Publicar Residuo {% endblock %}
+{% block cuerpo %}
+<div class="container-fluid" style="width: 40%; height: 100%; margin-top: 2%; margin-bottom: 3%;">
+    <form action="/crearusuario" class="form-control" method="post" enctype="multipart/form-data">
+        <h2 style="color: #3a6317;"> Crear publicación </h2>
+        <div class="form-group" style="width: 100%;">
+            <label for="">Nombres de la publicacion: <input type="text" id="Nombres" class="form-input" name="Nombre_Publicacion" style="width: 100%;"></label>
+        </div>
+        <div class="form-group">
+            <label for="Descripcion_Publicacion"> Descripcion de la publicación:
+            <textarea name="Descripcion_Publicacion" id="Descripcion_Publicacion" class="form-input" rows="5" cols="50" style="width: 100%; height: 25%;">
+            </textarea></label>
+    
+        </div>
+        <div class="form-group" style="display: flex;">
+            <label>Foto 1: <br> <input type="file" class="form-input" name="Foto1_Publicacion" accept=".image/*"
+                    style="width: 85%;"></label>
+        </div>
+        <div class="form-group" style="display: flex;">
+            <label>Foto 2: <br> <input type="file" class="form-input" name="Foto2_Publicacion" accept=".image/*"
+                    style="width: 85%;"></label>
+        </div>
+        <div class="form-group" style="display: flex;">
+            <label>Foto 3: <br> <input type="file" class="form-input" name="Foto3_Publicacion" accept=".image/*"
+                    style="width: 85%;"></label>
+        </div>
+        <div>
+            <label for=form-group"> Categoria:
+                <select class="form-input" style="width: 95%;" name="categoria">
+                    <option value="0"> </option>
+                    {% for categoria in categorias %}
+                    <option value="{{categoria.ID_Categoria_de_Residuo}}">{{ categoria.Nombre_de_Categoria }}</option>
+                    {% endfor %}
+                </select></label>
+        </div>
+        <div class="form-group">
+            <button class="btn-login" type="submit">Crear publicación</button>
+        </div>
+
+</div>
+
+<!-- <h1>
+    CREATE TABLE `publicacion` (
+  `id_publicacion` int(11) NOT NULL,
+  `Nombre_Publicacion` varchar(250) NOT NULL,
+  `Descripcion_Publicacion` mediumtext NOT NULL,
+  `Foto1_Publicacion` longblob NOT NULL,
+  `Foto2_Publicacion` longblob NOT NULL,
+  `Foto3_Publicacion` longblob NOT NULL,
+  `Categoria_Publicacion` int(11) NOT NULL,
+  `Propietario` int(11) NOT NULL,
+  `Estado_Publicacion` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+</h1> -->
+
+{% endblock %}
