@@ -7,35 +7,42 @@
 
 {% block cuerpo %}
 
-    <div class="container-fluid" style="width: 22%; height: 100%; margin-top: 2%; margin-bottom: 3%;">
-    <form action="" class="form-control form_register">
+<div class="container-fluid" style="width: 40%; height: 100%; margin-top: 2%; margin-bottom: 3%;">
+    <form action="/registrogsw" class="form-control" method="post" enctype="multipart/form-data">
         <h2 style="color: #3a6317;"> Registrate </h2>
-        <div class="name">
-            <label for="">Nombres: <input type="text" id="nombres" class="form-control"></label>
+        <div class="form-group" style="display: flex;">
+            <label for="">Nombres: <input type="text" id="Nombres" class="form-input" name="Nombres"></label>
+            <label for="">Apellidos: <input type="text" id="Apellidos" class="form-input" name="Apellidos"></label>
         </div>
-        <div class="lastname">
-            <label for="">Apellidos: <input type="text" id="apellidos" class="form-control"></label>
-        </div>
-        <div class="Typedoc">
+        <div class="form-group" style="display: flex;">
             <label for=""> Tipo de documento:
-                <select class="form-select" style="width: 208px;" name="tipo">
-                    <option value="0">           </option>
+                <select class="form-input" style="width: 95%;" name="tipo">
+                    <option value="0"> </option>
                     {% for tipo in tipos %}
                     <option value="{{tipo.Id_Tipo_de_Documento}}">{{ tipo.Tipo_de_documento }}</option>
                     {% endfor %}
                 </select></label>
+            <label for="">Número de documento: <input type="int" id="documento" class="form-input" name="Documento"
+                    style="margin-left: 3%; margin-top: 3%;"></label>
         </div>
-        <div class="Doc">
-            <label for="">Número de documento: <input type="int" id="documento"
-                    class="form-control"></label>
+        <div class="form-group" style="display: flex;">
+            <label for="">Email: <input type="email" id="email" class="form-input" name="Email"></label>
+            <label> Telefono: <input type="text" class="form-input" name="Telefono"> </label>
         </div>
-        <div class="password">
-            <label for="">Contraseña: <input type="password" id="password"
-                    class="form-control"></label>
+        <div class="form-group" style="display: flex;">
+            <label>Foto de perfil: <br> <input type="file" class="form-input" name="foto" accept=".image/*"
+                    style="width: 85%;"></label>
+            <label>Dirección: <input type="text" class="form-input" name="direccion"
+                    style=" width: 100%; margin-left: -10%;"> </label>
         </div>
-        <a href="" class="btn_reg" type="submit">Registrate</a> <br>
-        <a href="/iniciogsw" style="color: #3a6317; text-decoration: none;">¿Ya tienes cuenta? <br> Inicia sesión </a>
-    </form>
+
+        <div class="form-group">
+            <label>Contraseña:</label>
+            <input type="password" class="form-input" name="Password">
+        </div>
+        <div class="form-group">
+            <button class="btn-login" type="submit">Registrate</button>
+        </div>
 
 </div>
 

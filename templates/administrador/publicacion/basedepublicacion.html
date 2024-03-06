@@ -37,7 +37,7 @@
                         {% if(publicacion.Foto2_Publicacion =="") %}
                         <img src="../../../static/uploads/sinfoto.png"  class="sin_foto_mini" alt="sinfoto">
                         {% else %}
-                        <img src="{{ url_for('static', filename='uploads/' + publicacion.Foto1_Publicacion.decode('utf-8') ) }}" class="sin_foto_mini" alt="{{ publicacion.Nombre_Publicacion }}" style="width: 50px; height: 50px; border-radius: 50%;">
+                        <img src="{{ url_for('static', filename='uploads/' + publicacion.Foto2_Publicacion.decode('utf-8') ) }}" class="sin_foto_mini" alt="{{ publicacion.Nombre_Publicacion }}" style="width: 50px; height: 50px; border-radius: 50%;">
                         {% endif %}
                     </td>
                     {% endwith %}
@@ -47,7 +47,7 @@
                         {% if(publicacion.Foto3_Publicacion =="") %}
                         <img src="../../../static/uploads/sinfoto.png"  class="sin_foto_mini" alt="sinfoto">
                         {% else %}
-                        <img src="{{ url_for('static', filename='uploads/' + publicacion.Foto1_Publicacion.decode('utf-8') ) }}" class="sin_foto_mini" alt="{{ publicacion.Nombre_Publicacion }}" style="width: 50px; height: 50px; border-radius: 50%;">
+                        <img src="{{ url_for('static', filename='uploads/' + publicacion.Foto3_Publicacion.decode('utf-8') ) }}" class="sin_foto_mini" alt="{{ publicacion.Nombre_Publicacion }}" style="width: 50px; height: 50px; border-radius: 50%;">
                         {% endif %}
                     </td>
                     {% endwith %}
