@@ -53,7 +53,18 @@ def catalogo():
     cur.execute("SELECT * FROM categoria")
     catalogo = cur.fetchall()
 
-    return render_template('/catalogo.html', catalogos = catalogo)
+    cur = mysql.connection.cursor()
+    cur.execute('''
+        SELECT publicacion.*, GROUP_CONCAT(categoria.Nombre_de_Categoria SEPARATOR ', ') AS categoria,
+        CONCAT(persona.Nombres, ' ', persona.Apellidos) AS persona
+        FROM publicacion
+        LEFT JOIN categoria ON publicacion.Categoria_Publicacion = categoria.ID_Categoria_de_Residuo
+        LEFT JOIN persona ON publicacion.Propietario = persona.Id_Persona
+        GROUP BY publicacion.id_publicacion
+    ''')
+    publicacion = cur.fetchall() 
+
+    return render_template('/catalogo.html', catalogos = catalogo, publicaciones = publicacion)
 
 @app.route('/registrogsw', methods = ["GET", "POST"])
 def registrogsw():
