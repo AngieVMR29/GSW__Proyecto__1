@@ -78,15 +78,19 @@ def iniciogsw():
         if persona:
             if password == persona["Password"]:
                 session['email'] = persona['Email']
-                Id_Persona = persona['Id_Persona']
+                Id_Persona  = persona['Id_Persona']
 
                 cur = mysql.connection.cursor()
                 cur.execute("SELECT * FROM asignacion_roles WHERE id_Persona1_FK = %s",(Id_Persona,))
                 persona = cur.fetchone()
 
                 if persona['id_roles_fk'] == 1 or persona['id_roles_fk'] == 2:
+                    session['rol'] = persona['id_roles_fk']
+                    session['Id_Persona'] = Id_Persona
                     return redirect(url_for('administrador'))
                 elif persona['id_roles_fk'] == 3 or persona['id_roles_fk'] == 4:
+                    session['rol'] = persona['id_roles_fk']
+                    session['Id_Persona'] = Id_Persona
                     return redirect(url_for('usuario'))
             else:
                 notificacion.title = "Datos incorrectos, valida nuevamente"
@@ -198,7 +202,25 @@ def editar_persona(id):
     
 @app.route('/basedepublicaciones', methods=['GET','POST'])
 def basedepublicaciones():
-    return render_template('administrador/administrador.html')
+    cur = mysql.connection.cursor()
+    cur.execute('''
+        SELECT publicacion.*, GROUP_CONCAT(categoria.Nombre_de_Categoria SEPARATOR ', ') AS categoria,
+        CONCAT(persona.Nombres, ' ', persona.Apellidos) AS persona
+        FROM publicacion
+        LEFT JOIN categoria ON publicacion.Categoria_Publicacion = categoria.ID_Categoria_de_Residuo
+        LEFT JOIN persona ON publicacion.Propietario = persona.Id_Persona
+        GROUP BY publicacion.id_publicacion
+    ''')
+    publicacion = cur.fetchall()        
+    return render_template('administrador/publicacion/basedepublicacion.html', publicaciones= publicacion)
+
+@app.route('/eliminarpublicacion/<string:id>')
+def eliminarpublicacion(id):
+        cur = mysql.connection.cursor()
+        cur.execute('DELETE FROM publicacion WHERE id_publicacion = %s',(id,))
+        cur.connection.commit()
+        flash('Publicación eliminada con exito')
+        return redirect(url_for('basedepublicaciones'))
 
 @app.route('/categorias', methods=['GET','POST'])
 def categorias():
@@ -222,13 +244,42 @@ def eliminarcategorias(id):
 
 @app.route('/usuario', methods=['GET','POST'])
 def usuario():
-    return render_template('usuario/usuario.html')
+    if 'email' in session and 'rol' in session and session['rol'] in (3, 4):
+        return render_template('usuario/usuario.html')
+    else:
+        return redirect(url_for('iniciogsw'))
 
 @app.route('/crearpublicacion', methods=['GET','POST'])
 def crearpublicacion():
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM categoria")
     categoria = cur.fetchall()
+
+    if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
+        if request.method == 'POST':
+            Nombre_Publicacion = request.form['Nombre_Publicacion']
+            Descripcion_Publicacion = request.form['Descripcion_Publicacion'] 
+            if(request.files['Foto1_Publicacion'] !=''):
+                file = request.files['Foto1_Publicacion'] 
+                nuevoNombreFile1 = recibeFoto(file) 
+            if(request.files['Foto2_Publicacion'] !=''):
+                file = request.files['Foto2_Publicacion'] 
+                nuevoNombreFile2 = recibeFoto(file) 
+            if(request.files['Foto3_Publicacion'] !=''):
+                file = request.files['Foto3_Publicacion'] #recibiendo el archivo
+                nuevoNombreFile3 = recibeFoto(file)
+            Categoria_Publicacion = request.form['Categoria_Publicacion'] 
+            Precio = request.form['Precio'] 
+            Propietario = session['Id_Persona']
+            Estado_p = True
+            cur = mysql.connection.cursor()
+            cur.execute(" INSERT INTO publicacion (Nombre_Publicacion, Descripcion_Publicacion,Foto1_Publicacion, Foto2_Publicacion, Foto3_Publicacion, Categoria_Publicacion, Precio, Propietario, Estado_Publicacion) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)",(Nombre_Publicacion, Descripcion_Publicacion,nuevoNombreFile1, nuevoNombreFile2, nuevoNombreFile3, Categoria_Publicacion, Precio, Propietario, Estado_p))
+            cur.connection.commit()
+            flash('Producto agregado con exito')
+            return render_template('usuario/crearpublicacion.html')
+    else:
+        return redirect(url_for('iniciogsw'))
+
     return render_template('usuario/crearpublicacion.html', categorias = categoria)
 
 

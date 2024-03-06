@@ -2,10 +2,10 @@
 {% block title %} Publicar Residuo {% endblock %}
 {% block cuerpo %}
 <div class="container-fluid" style="width: 40%; height: 100%; margin-top: 2%; margin-bottom: 3%;">
-    <form action="/crearusuario" class="form-control" method="post" enctype="multipart/form-data">
+    <form action="/crearpublicacion" class="form-control" method="post" enctype="multipart/form-data">
         <h2 style="color: #3a6317;"> Crear publicación </h2>
         <div class="form-group" style="width: 100%;">
-            <label for="">Nombres de la publicacion: <input type="text" id="Nombres" class="form-input" name="Nombre_Publicacion" style="width: 100%;"></label>
+            <label for="">Nombres de la publicacion: <input type="text" id="Nombre_Publicacion" class="form-input" name="Nombre_Publicacion" style="width: 100%;"></label>
         </div>
         <div class="form-group">
             <label for="Descripcion_Publicacion"> Descripcion de la publicación:
@@ -15,43 +15,47 @@
         </div>
         <div class="form-group" style="display: flex;">
             <label>Foto 1: <br> <input type="file" class="form-input" name="Foto1_Publicacion" accept=".image/*"
-                    style="width: 85%;"></label>
+                    style="width: 100%;"></label>
         </div>
         <div class="form-group" style="display: flex;">
             <label>Foto 2: <br> <input type="file" class="form-input" name="Foto2_Publicacion" accept=".image/*"
-                    style="width: 85%;"></label>
+                    style="width: 100%;"></label>
         </div>
         <div class="form-group" style="display: flex;">
             <label>Foto 3: <br> <input type="file" class="form-input" name="Foto3_Publicacion" accept=".image/*"
-                    style="width: 85%;"></label>
+                    style="width: 100%;"></label>
         </div>
         <div>
             <label for=form-group"> Categoria:
-                <select class="form-input" style="width: 95%;" name="categoria">
+                <select class="form-input" style="width: 95%;" name="Categoria_Publicacion">
                     <option value="0"> </option>
                     {% for categoria in categorias %}
                     <option value="{{categoria.ID_Categoria_de_Residuo}}">{{ categoria.Nombre_de_Categoria }}</option>
                     {% endfor %}
                 </select></label>
         </div>
+        <div class="form-group" style="width: 100%;">
+            <label for="Precio">Precio: <input type="text" id="Precio" class="form-input" name="Precio" style="width: 100%;"></label>
+        </div>
+
         <div class="form-group">
             <button class="btn-login" type="submit">Crear publicación</button>
         </div>
 
 </div>
 
-<!-- <h1>
-    CREATE TABLE `publicacion` (
-  `id_publicacion` int(11) NOT NULL,
-  `Nombre_Publicacion` varchar(250) NOT NULL,
-  `Descripcion_Publicacion` mediumtext NOT NULL,
-  `Foto1_Publicacion` longblob NOT NULL,
-  `Foto2_Publicacion` longblob NOT NULL,
-  `Foto3_Publicacion` longblob NOT NULL,
-  `Categoria_Publicacion` int(11) NOT NULL,
-  `Propietario` int(11) NOT NULL,
-  `Estado_Publicacion` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-</h1> -->
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+
+    <div class="alert alert-warning alert-dismissible fade show" role="alert"
+        style="margin-left: 6%; margin-right: 6%; margin-bottom: 3%;">
+        <strong>¡Base modificada con exito!</strong>
+        <p>{{ message }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
 
 {% endblock %}
