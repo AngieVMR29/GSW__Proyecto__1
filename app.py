@@ -72,6 +72,30 @@ def registrogsw():
     cur.execute("SELECT * FROM tipo_documento")
     tipo = cur.fetchall()
 
+    if request.method == 'POST':
+        Nombres = request.form['Nombres']
+        Apellidos = request.form['Apellidos']
+        Tipo_Doc = request.form['tipo']
+        Documento = request.form['Documento']
+        Email = request.form['Email']
+        Telefono = request.form['Telefono']
+        if(request.files['foto'] !=''):
+            file     = request.files['foto'] #recibiendo el archivo
+            nuevoNombreFile = recibeFoto(file) 
+
+        Password = request.form['Password']
+        direccion = request.form['direccion']
+
+        cur = mysql.connection.cursor()
+        cur.execute(" INSERT INTO persona (Nombres, Apellidos,Tipo_Doc, Documento, Email,Telefono, Password, foto, direccion, estado) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(Nombres, Apellidos,Tipo_Doc, Documento, Email,Telefono, Password,nuevoNombreFile,direccion,True))
+        cur.connection.commit()
+
+        cur.execute("SELECT LAST_INSERT_ID()")
+        id_persona = cur.fetchone()['LAST_INSERT_ID()']
+
+        cur.execute("INSERT INTO asignacion_roles (id_roles_fk, id_Persona1_FK) VALUES (3, %s), (4, %s)", (id_persona, id_persona))
+        cur.connection.commit()
+
     return render_template('/registrate.html', tipos = tipo)
 
 
@@ -183,6 +207,7 @@ def crear_persona():
 @app.route('/eliminar/<string:id>')
 def eliminar_persona(id):
         cur = mysql.connection.cursor()
+        cur.execute("DELETE FROM asignacion_roles WHERE id_Persona1_FK = %s", (id,))
         cur.execute('DELETE FROM persona WHERE Id_Persona = %s',(id,))
         cur.connection.commit()
         
