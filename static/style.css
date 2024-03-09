@@ -358,3 +358,10 @@ nav {
     background-color: #99b198;
 }
 
+.list-group {
+    .list-group-item.active {
+        border: none;
+        background-color: #3a6317;
+    }
+}
+
