@@ -45,7 +45,12 @@ def not_found():
 @app.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('index'))
+    return render_template('/inicio.html')
+
+@app.route('/sobrenosotros')
+def sobrenosotros():
+    return render_template('/nosotros.html')
+
 
 @app.route('/catalogo')
 def catalogo():
@@ -238,17 +243,24 @@ def editar_persona(id):
     
 @app.route('/basedepublicaciones', methods=['GET','POST'])
 def basedepublicaciones():
-    cur = mysql.connection.cursor()
-    cur.execute('''
-        SELECT publicacion.*, GROUP_CONCAT(categoria.Nombre_de_Categoria SEPARATOR ', ') AS categoria,
-        CONCAT(persona.Nombres, ' ', persona.Apellidos) AS persona
-        FROM publicacion
-        LEFT JOIN categoria ON publicacion.Categoria_Publicacion = categoria.ID_Categoria_de_Residuo
-        LEFT JOIN persona ON publicacion.Propietario = persona.Id_Persona
-        GROUP BY publicacion.id_publicacion
-    ''')
-    publicacion = cur.fetchall()        
-    return render_template('administrador/publicacion/basedepublicacion.html', publicaciones= publicacion)
+    if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
+        cur = mysql.connection.cursor()
+        cur.execute('''
+            SELECT publicacion.*, GROUP_CONCAT(categoria.Nombre_de_Categoria SEPARATOR ', ') AS categoria,
+            CONCAT(persona.Nombres, ' ', persona.Apellidos) AS persona
+            FROM publicacion
+            LEFT JOIN categoria ON publicacion.Categoria_Publicacion = categoria.ID_Categoria_de_Residuo
+            LEFT JOIN persona ON publicacion.Propietario = persona.Id_Persona
+            GROUP BY publicacion.id_publicacion
+            ''')
+        publicacion = cur.fetchall()        
+        return render_template('administrador/publicacion/basedepublicacion.html', publicaciones= publicacion)
+    elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
+        flash('No tienes permisos para ingresar a esta página.')
+        return redirect(url_for('iniciogsw'))
+    else:
+        flash('No has iniciado sesión.')
+        return redirect(url_for('iniciogsw'))
 
 @app.route('/eliminarpublicacion/<string:id>')
 def eliminarpublicacion(id):

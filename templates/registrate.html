@@ -2,43 +2,94 @@
 {% block title %}Registrate{% endblock %}
 
 {% block botones %}
-    <h1></h1>
+<h1></h1>
 {% endblock %}
 
 {% block cuerpo %}
 
+
+<!-- <script>
+    function validarFormulario() {
+        var nombres = document.getElementById('Nombres').value;
+        var apellidos = document.getElementById('Apellidos').value;
+        var documento = document.getElementById('documento').value;
+        var email = document.getElementById('email').value;
+        var telefono = document.getElementById('telefono').value;
+        var foto = document.getElementById('foto').value;
+        var direccion = document.getElementById('direccion').value;
+        var tipoDocumento = document.getElementById('tipoDocumento').value;
+        var password = document.getElementById('password').value;
+
+        if (nombres.trim() == '' || apellidos.trim() == '' || documento.trim() == '' || email.trim() == '' || telefono.trim() == '' || foto.trim() == '' || direccion.trim() == '' || tipoDocumento.trim == '0' || password.trim() == '') {
+            alert('Por favor, complete todos los campos obligatorios.');
+            return false;
+        }
+
+        if (!lettersRegex.test(nombres) || !lettersRegex.test(apellidos)) {
+            alert('Los nombres y apellidos solo pueden contener letras en mayúsculas y minúsculas.');
+            return false;
+        }
+
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alert('Por favor, ingrese un correo electrónico válido.');
+            return false;
+        }
+
+        var telefonoRegex = /^\d{10}$/;
+        if (!telefonoRegex.test(telefono)) {
+            alert('Por favor, ingrese un número de teléfono válido (10 dígitos sin espacios ni guiones).');
+            return false;
+        }
+
+
+        var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,12}$/;
+        if (!passwordRegex.test(password)) {
+            alert('La contraseña debe contener al menos una mayúscula, una minúscula, un número, un carácter especial, y tener una longitud entre 8 y 12 caracteres.');
+            return false;
+        }
+
+        return true;
+    }
+</script> -->
+
 <div class="container-fluid" style="width: 40%; height: 100%; margin-top: 2%; margin-bottom: 3%;">
-    <form action="/registrogsw" class="form-control" method="post" enctype="multipart/form-data">
+    <form action="/registrogsw" class="form-control" method="post" enctype="multipart/form-data"
+        onsubmit="return validarFormulario()">
         <h2 style="color: #3a6317;"> Registrate </h2>
         <div class="form-group" style="display: flex;">
-            <label for="">Nombres: <input type="text" id="Nombres" class="form-input" name="Nombres"></label>
-            <label for="">Apellidos: <input type="text" id="Apellidos" class="form-input" name="Apellidos"></label>
+            <label for="Nombres">Nombres: <input type="text" id="Nombres" class="form-input" name="Nombres"
+                    pattern="[A-Za-z\s]{1,50}" title="Solo se permiten letras y espacios, máximo 50 caracteres"
+                    required></label>
+            <label for="Apellidos">Apellidos: <input type="text" id="Apellidos" class="form-input" name="Apellidos"
+                    pattern="[A-Za-z\s]{1,50}" title="Solo se permiten letras y espacios, máximo 50 caracteres"
+                    required></label>
         </div>
         <div class="form-group" style="display: flex;">
             <label for=""> Tipo de documento:
-                <select class="form-input" style="width: 95%;" name="tipo">
-                    <option value="0"> </option>
+                <select class="form-input" style="width: 95%;" id="tipoDocumento" name="tipo" required>
+                    <option value="" disabled selected hidden>Seleccione</option>
                     {% for tipo in tipos %}
                     <option value="{{tipo.Id_Tipo_de_Documento}}">{{ tipo.Tipo_de_documento }}</option>
                     {% endfor %}
                 </select></label>
             <label for="">Número de documento: <input type="int" id="documento" class="form-input" name="Documento"
-                    style="margin-left: 3%; margin-top: 3%;"></label>
+                    style="margin-left: 3%; margin-top: 3%;" pattern="[0-9]{1,30}" maxlength="30" title="Solo se permiten números, máximo 30 caracteres y no se permiten espacios" required></label>
         </div>
         <div class="form-group" style="display: flex;">
-            <label for="">Email: <input type="email" id="email" class="form-input" name="Email"></label>
-            <label> Telefono: <input type="text" class="form-input" name="Telefono"> </label>
+            <label for="">Email: <input type="email" id="email" class="form-input" name="Email" pattern="[^\s@]+@[^\s@]+\.[^\s@]+" title="Formato no valido" required></label>
+            <label> Telefono: <input type="text" class="form-input" name="Telefono" pattern="[0-9]{1,10}" maxlength="10" title="Solo se permiten números, máximo 10 caracteres y no se permiten espacios" required> </label>
         </div>
         <div class="form-group" style="display: flex;">
-            <label>Foto de perfil: <br> <input type="file" class="form-input" name="foto" accept=".image/*"
-                    style="width: 85%;"></label>
-            <label>Dirección: <input type="text" class="form-input" name="direccion"
-                    style=" width: 100%; margin-left: -10%;"> </label>
+            <label>Foto de perfil: <br> <input type="file" class="form-input" id="foto" name="foto" accept="image/jpeg, image/png, image/jpg"
+                    style="width: 85%;" required></label>
+            <label>Dirección: <input type="text" class="form-input" id="direccion" name="direccion"
+                    style=" width: 100%; margin-left: -10%;" required> </label>
         </div>
 
         <div class="form-group">
             <label>Contraseña:</label>
-            <input type="password" class="form-input" name="Password">
+            <input type="password" id="password" class="form-input" name="Password" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,15}" title="Debe contener al menos: una mayúscula una minúscula un número un carácter especial una longitud entre 6 y 15 caracteres" required>
         </div>
         <div class="form-group">
             <button class="btn-login" type="submit">Registrate</button>
