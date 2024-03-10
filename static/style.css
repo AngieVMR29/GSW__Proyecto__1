@@ -365,3 +365,41 @@ nav {
     }
 }
 
+
+.tab-pane {
+    padding: 2%;
+    background-color: #fff;
+    width: 90%;
+    max-height: 150px;
+    border: solid 1px #3a6317;
+    border-radius: 6px;
+    overflow: auto;
+}
+
+::-webkit-scrollbar {
+    background-color: none;
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #3a6317;
+    width: 8px;
+
+}
+
+.list-description {
+    padding: 4px;
+}
+
+.list-description p {
+    margin: 0;
+    border-bottom: 1px solid black;
+}
+
+.normas {
+    margin-left: 5%;
+    margin-bottom: 2%;
+    width: 90%;
+    height: 300px;
+    overflow: auto;
+}

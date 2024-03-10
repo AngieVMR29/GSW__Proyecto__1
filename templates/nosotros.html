@@ -1,29 +1,113 @@
 {% extends 'inicio.html' %}
+
 {% block title %} Sobre Nosotros {% endblock %}
 {% block cuerpo %}
 
-<div class="content" style="margin-top: 2%; margin-bottom: 2%; margin-left: 2%;" >
-    <div class="row">
-        <div class="col-4">
-          <div class="list-group" id="list-tab" role="tablist">
-            <a class="list-group-item list-group-item-action" id="list-home-list" data-bs-toggle="list" href="#list-home" role="tab" aria-controls="list-home">Home</a>
-            <a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list" href="#list-profile" role="tab" aria-controls="list-profile">Profile</a>
-            <a class="list-group-item list-group-item-action" id="list-messages-list" data-bs-toggle="list" href="#list-messages" role="tab" aria-controls="list-messages">Messages</a>
-            <a class="list-group-item list-group-item-action" id="list-settings-list" data-bs-toggle="list" href="#list-settings" role="tab" aria-controls="list-settings">Settings</a>
-          </div>
-        </div>
-        <div class="col-8">
-          <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show" id="list-home" role="tabpanel" aria-labelledby="list-home-list">...</div>
-            <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">...</div>
-            <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">...</div>
-            <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">...</div>
-          </div>
-        </div>
-      </div>
+<div style="background-color: rgba(211, 211, 211, 0.5); text-align: center;">
+  <h1 style="color: #3a6317; margin-bottom: 2%; padding: 0 0.5% 0.5%;">Conoce más sobre nosotros</h1>
+
 </div>
 
+<div class="content" style="margin-top: 2%; margin-bottom: 2%; margin-left: 2%;">
+  <div class="row">
+    <div class="col-4">
+      <div class="list-group" id="list-tab" role="tablist">
+        <a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list"
+          href="#list-home" role="tab" aria-controls="list-home">Visión</a>
+        <a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list"
+          href="#list-profile" role="tab" aria-controls="list-profile">Misión</a>
+        <a class="list-group-item list-group-item-action" id="list-messages-list" data-bs-toggle="list"
+          href="#list-messages" role="tab" aria-controls="list-messages">Objetivo</a>
+        <a class="list-group-item list-group-item-action" id="list-settings-list" data-bs-toggle="list"
+          href="#list-settings" role="tab" aria-controls="list-settings">Nuestros valores</a>
+      </div>
+    </div>
+    <div class="col-8">
+      <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">Ser la
+          plataforma líder a nivel nacional en la promoción de la economía circular, conectando a vendedores y
+          compradores de productos reciclables de manera eficiente y segura. Aspiramos a expandir nuestra influencia y
+          contribuir positivamente a la creación de un mundo más sostenible.</div>
+        <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">Facilitar la
+          comercialización y promover la conciencia ambiental al proporcionar una plataforma accesible y confiable para
+          la compra y venta de productos reciclables. Nos esforzamos por fomentar la sostenibilidad y contribuir
+          activamente a la conservación del medio ambiente.</div>
+        <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">Nuestro
+          objetivo es ofrecer una plataforma innovadora que impulse la economía circular al facilitar la transacción de
+          productos reciclables. Buscamos aumentar la conciencia ambiental y promover prácticas de consumo responsable
+          entre nuestros usuarios, al mismo tiempo que brindamos soluciones rentables y sostenibles para la gestión de
+          residuos.</div>
+        <div class="tab-pane fade list-description" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">
+          <p>1. Sostenibilidad: Nos comprometemos a promover prácticas comerciales y de consumo que protejan y regeneren
+            el medio ambiente.</p>
+          <p>2. Transparencia: Operamos con integridad y transparencia en todas nuestras interacciones con clientes,
+            proveedores y partes interesadas.</p>
+          <p>3. Innovación: Buscamos constantemente formas innovadoras de mejorar nuestros servicios y contribuir al
+            desarrollo de soluciones sostenibles.</p>
+          <p>4. Colaboración: Valoramos la colaboración y el trabajo en equipo como herramientas fundamentales para
+            lograr nuestros objetivos y generar un impacto positivo.</p>
+          <p>5. Responsabilidad Social: Nos preocupamos por el bienestar de la comunidad y nos comprometemos a ser un
+            agente de cambio positivo en la sociedad.</p>
+          <p style="border: none;">6. Empoderamiento: Capacitamos a nuestros usuarios y les proporcionamos las herramientas necesarias para
+          que tomen decisiones informadas y responsables en su consumo y gestión de residuos.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
+<div id="map" style="background-color: rgba(211, 211, 211, 0.5); margin-left: 25%; margin-right: 25%; margin-bottom: 2%; padding-bottom: 2%; border: 1px solid #3a6317; border-radius: 5%;">
+  <div class="ubicanos">
+    <h2 style="color: #3a6317; text-align: center; margin-top: 2%; margin-bottom: 2%;">¿En dónde puedes ubicarnos?</h2>
+  </div>
+  <div id="map" style="margin-left: 6%;">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3976.556956079555!2d-74.14983332596304!3d4.672782191900927!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13 1!3m3!1m2!1s0x8e3f9c8b528eb36d%3A0x4f60fb21a6a64fbd!2zRm9udGliw7NuLCBCb2dvdMOh!5e0!3m2!1ses-419!2sco!4v1710020723253!5m2!1ses-419!2sco" width="600" height="450" style="border:0; border-radius: 5px; border: 1px solid #3a6317" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+</div>
 
+<div class="row politicas" style="margin-top: 2%; margin-bottom: 2%;">
+  <div class="col" style="margin-left: 8%;">
+      <div class="card" style="width: 15rem; background-color: rgba(211, 211, 211, 0.5); border: 1px solid #3a6317;">
+        <i class="bi bi-person-arms-up"></i>
+          <div class="card-body" style="text-align: center;">
+            <p class="card-text">Trabajamos con personal capacitado para mejorar cada día.</p>
+          </div>
+      </div>
+  </div>
+  <div class="col">
+      <div class="card" style="width: 15rem; background-color: rgba(211, 211, 211, 0.5); border: 1px solid #3a6317;">
+        <i class="bi bi-emoji-laughing-fill"></i>
+          <div class="card-body" style="text-align: center;">
+            <p class="card-text">Te queremos agradecemos por pertenecer a nuestro equipo.</p>
+          </div>
+      </div>
+  </div>
+  <div class="col">
+      <div class="card" style="width: 15rem; background-color: rgba(211, 211, 211, 0.5); border: 1px solid #3a6317;">
+        <i class="bi bi-tree"></i>
+          <div class="card-body" style="text-align: center;">
+            <p class="card-text">Gracias a tu apoyo estamos mejorando el medio ambiente.</p>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="card normas">
+  <div class="card-header" style="background-color: rgba(211, 211, 211, 0.5);">
+    <h5 class="card-title text-center" style="color: #3a6317;">Normatividad interna.</h5>
+  </div>
+  <div class="card-body" style="max-height: 200px;">
+      <p>1.Código de conducta y ética profesional: Establece las expectativas de comportamiento ético y profesional para todos los empleados. Esto puede incluir temas como integridad, respeto, confidencialidad y responsabilidad.</p>
+      <p>2.Horarios y asistencia: Especifica los horarios de trabajo, políticas de puntualidad, procedimientos para solicitar tiempo libre y cómo se registra la asistencia.</p>
+      <p>3.Vestimenta y apariencia personal: Define las pautas sobre la vestimenta adecuada y la apariencia personal en el lugar de trabajo.</p>
+      <p>4.Comunicación interna y externa: Establece cómo se comunica la empresa con los empleados y cómo se manejan las comunicaciones con clientes, proveedores y otras partes interesadas.</p>
+      <p>5.Seguridad en el lugar de trabajo: Describe los protocolos de seguridad y salud ocupacional que deben seguir los empleados para prevenir accidentes y lesiones en el lugar de trabajo.</p>
+      <p>6.Uso de equipos y recursos: Especifica cómo se deben utilizar los equipos, herramientas y recursos de la empresa, incluidos dispositivos tecnológicos, software y propiedad intelectual.</p>
+      <p>7.Política de privacidad y protección de datos: Define cómo se manejan y protegen los datos confidenciales de la empresa, los clientes y los empleados.</p>
+      <p>8.Procedimientos de resolución de conflictos y quejas: Establece cómo se manejan los conflictos entre empleados, así como los procedimientos para presentar quejas y resolver disputas de manera justa y eficiente.</p>
+      <p>9.Desarrollo profesional y capacitación: Describe las oportunidades de desarrollo profesional y capacitación disponibles para los empleados, así como los requisitos para la participación en programas de capacitación.</p>
+      <p>10.Normas de rendimiento y evaluación: Define cómo se evalúa el desempeño de los empleados y cómo se establecen y revisan los objetivos individuales y organizacionales.</p>
+  </div>
+</div>
 
 {% endblock %}
