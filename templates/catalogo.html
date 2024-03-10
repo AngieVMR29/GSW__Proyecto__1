@@ -4,10 +4,10 @@
 
 <div style="display: flex;">
 
-    <div style="display: flex; height: 100vh; width: 18%; background-color: white;">
+    <div style="display: flex; width: 18%; background-color: white; min-height: 100%;">
         <div>
 
-            <h3 style="margin-left: 70%; margin-top: 9%; color: #3a6317;"> Filtros </h3> <br>
+            <h3 style="margin-left: 60%; margin-top: 9%; color: #3a6317;"> Filtros </h3> <br>
             {% for catalogo in catalogos %}
             <div class="form-check" style="margin-left: 30%;">
                 <input class="form-check-input" type="checkbox" value="{{catalogo.ID_Categoria_de_Residuo}}"
@@ -20,8 +20,8 @@
         </div>
     </div>
     <div style="margin-left: 3%;">
-        <div>
-            <h2 style="margin-left: 50%; color: #3a6317;"> Catálogo </h2>
+        <div style="background-color: rgba(211, 211, 211, 0.5);">
+            <h2 style="margin-left: 40%; color: #3a6317;"> Catálogo </h2>
         </div>
         <div class="row">
             {% for publicacion in publicaciones %}

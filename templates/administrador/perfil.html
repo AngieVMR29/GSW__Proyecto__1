@@ -1,0 +1,39 @@
+{% extends 'administrador/administrador.html' %}
+{% block title %} Perfil Administrador {% endblock %}
+{% block cuerpo %}
+<div class="informacion"
+    style="width: 60%; background-color: rgba(211, 211, 211, 0.5); border: 1px solid black; margin: 1% 20%; padding: 2%; border-radius: 1%; box-shadow: 4px 2px 4px black;">
+    {% if persona %}
+    <div style="display: flex; align-items: center; flex-direction: column;">
+        {% with urlPersona = '/static/uploads/' %}
+        {% if persona['foto'] == "" %}
+        <img src="../../static/img/sinfoto.png" class="sin_foto_mini" alt="sinfoto">
+        {% else %}
+        <img src="{{ url_for('static', filename='uploads/' + persona['foto'].decode('utf-8') ) }}" class="sin_foto_mini"
+            alt="{{ persona['Nombres'] }}"
+            style="width: 150px; height: 150px; border-radius: 50%; border: solid 1px black; box-shadow: 2px 2px 4px black;">
+        <div class="datos" style="margin-top: 3%;">
+            <h2>{{ persona['Nombres'] }} {{ persona['Apellidos'] }}</h2>
+        </div>
+        <div>
+            <h3 style="color: gray;">{{ persona['roles'] }}</h3>
+        </div>
+        <hr style="width: 95%; margin: 0 1%; color: black; margin-bottom: 0;">
+        <h4>Datos personales</h4>
+    </div>
+    <div style="display: flex; justify-content: space-evenly;">
+        <div>
+            <h6>Correo: <br> {{ persona['Email'] }}</h6>
+            <h6>Celular: <br> {{ persona['Telefono'] }}</h6>
+        </div>
+        <div>
+            <h6>Documento: <br> {{ persona['Documento'] }}</h6>
+            <h6>Dirección: <br> {{ persona['direccion'] }}</h6>
+        </div>
+    </div>
+    {% endif %}
+    {% endwith %}
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -144,24 +144,69 @@ def iniciogsw():
             return render_template("inicios.html")
     return render_template('/inicios.html')
 
-@app.route('/administrador', methods=['GET','POST'])
+@app.route('/administrador')
 def administrador():
-    return render_template('administrador/administrador.html')
+    if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
+        persona_id = session['Id_Persona']
+        return render_template('administrador/administrador.html')
+    elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
+        flash('No tienes permisos para ingresar a esta página.')
+        return redirect(url_for('iniciogsw'))
+    else:
+        flash('No has iniciado sesión.')
+        return redirect(url_for('iniciogsw'))
+    
+@app.route('/perfiladministrador')
+def perfila():
+        if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
+            persona_id = session['Id_Persona']
+            print(persona_id)
+            cur = mysql.connection.cursor()
+            cur.execute('''
+            SELECT persona.*, GROUP_CONCAT(roles.Nombre_Rol SEPARATOR ', ') AS roles,
+            GROUP_CONCAT(tipo_documento.Tipo_de_documento SEPARATOR ', ') AS tipo_documento
+            FROM persona
+            LEFT JOIN asignacion_roles ON persona.Id_Persona = asignacion_roles.id_Persona1_FK
+            LEFT JOIN roles ON asignacion_roles.id_roles_fk = roles.Id_Roles
+            LEFT JOIN tipo_documento ON persona.Tipo_Doc = tipo_documento.Id_Tipo_de_Documento
+            WHERE persona.Id_Persona = %s
+            GROUP BY persona.Id_Persona
+            ''', (persona_id,))
+            persona = cur.fetchone() 
+            cur.close() 
+            print(persona)
+            return render_template('administrador/perfil.html', persona= persona)
+        elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
+            flash('No tienes permisos para ingresar a esta página.')
+            return redirect(url_for('iniciogsw'))
+        else:
+            flash('No has iniciado sesión.')
+            return redirect(url_for('iniciogsw'))
+
 
 @app.route('/basedeusuarios')
 def basedeusuarios():
-    cur = mysql.connection.cursor()
-    cur.execute('''
-        SELECT persona.*, GROUP_CONCAT(roles.Nombre_Rol SEPARATOR ', ') AS roles,
-        GROUP_CONCAT(tipo_documento.Tipo_de_documento SEPARATOR ', ') AS tipo_documento
-        FROM persona
-        LEFT JOIN asignacion_roles ON persona.Id_Persona = asignacion_roles.id_Persona1_FK
-        LEFT JOIN roles ON asignacion_roles.id_roles_fk = roles.Id_Roles
-        LEFT JOIN tipo_documento ON persona.Tipo_Doc = tipo_documento.Id_Tipo_de_Documento
-        GROUP BY persona.Id_Persona
-    ''')
-    personas = cur.fetchall()        
-    return render_template('administrador/usuarios/basedeusuarios.html', personas=personas)
+    if 'email' in session and 'Id_Persona' in session and 'rol' in session:
+        if session['rol'] in (1, 2):
+            cur = mysql.connection.cursor()
+            cur.execute('''
+                SELECT persona.*, GROUP_CONCAT(roles.Nombre_Rol SEPARATOR ', ') AS roles,
+                GROUP_CONCAT(tipo_documento.Tipo_de_documento SEPARATOR ', ') AS tipo_documento
+                FROM persona
+                LEFT JOIN asignacion_roles ON persona.Id_Persona = asignacion_roles.id_Persona1_FK
+                LEFT JOIN roles ON asignacion_roles.id_roles_fk = roles.Id_Roles
+                LEFT JOIN tipo_documento ON persona.Tipo_Doc = tipo_documento.Id_Tipo_de_Documento
+                GROUP BY persona.Id_Persona
+            ''')
+            personas = cur.fetchall()
+            cur.close()
+            return render_template('administrador/usuarios/basedeusuarios.html', personas=personas)
+        else:
+            flash('No tienes permisos para acceder a esta página.')
+            return redirect(url_for('inicio')) 
+    else:
+        flash('No has iniciado sesión.')
+        return redirect(url_for('iniciogsw')) 
 
 
 
@@ -296,6 +341,33 @@ def usuario():
         return render_template('usuario/usuario.html')
     else:
         return redirect(url_for('iniciogsw'))
+
+@app.route('/perfilu')
+def perfilu():
+        if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
+            persona_id = session['Id_Persona']
+            print(persona_id)
+            cur = mysql.connection.cursor()
+            cur.execute('''
+            SELECT persona.*, GROUP_CONCAT(roles.Nombre_Rol SEPARATOR ', ') AS roles,
+            GROUP_CONCAT(tipo_documento.Tipo_de_documento SEPARATOR ', ') AS tipo_documento
+            FROM persona
+            LEFT JOIN asignacion_roles ON persona.Id_Persona = asignacion_roles.id_Persona1_FK
+            LEFT JOIN roles ON asignacion_roles.id_roles_fk = roles.Id_Roles
+            LEFT JOIN tipo_documento ON persona.Tipo_Doc = tipo_documento.Id_Tipo_de_Documento
+            WHERE persona.Id_Persona = %s
+            GROUP BY persona.Id_Persona
+            ''', (persona_id,))
+            persona = cur.fetchone() 
+            cur.close() 
+            print(persona)
+            return render_template('usuario/perfilu.html', persona= persona)
+        elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
+            flash('No tienes permisos para ingresar a esta página.')
+            return redirect(url_for('iniciogsw'))
+        else:
+            flash('No has iniciado sesión.')
+            return redirect(url_for('iniciogsw'))
 
 @app.route('/crearpublicacion', methods=['GET','POST'])
 def crearpublicacion():
