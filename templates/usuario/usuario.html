@@ -3,10 +3,24 @@
 {% block nav %} 
 <nav class="navbar" style="background-color: white;">
     <div class="container-fluid">
-        <div class="col box_title" style="margin-left: 10px;">
+        <div class="col box_title" style="max-width: 200px;">
             <a href="/usuario" style="text-decoration: none;">
                 <h3 class="title"><i class="bi bi-globe-americas"></i> GreenSoftWorld</h3>
             </a>
+        </div>
+        <div class="menu-principal">
+            <div style="margin-left: -50px;">
+                <div class="buscar">
+                    <form action="/buscar" method="GET">
+                        <input type="text" class="busqueda" name="q" placeholder="   Buscar...">
+                        <button type="submit"><i class="bi bi-search"></i></button>
+                    </form>
+                </div>
+                <div class="menu"  style="margin-left: 20%;">
+                    <a class="nav-link active a" aria-current="page" href="/catalogo">Cátalogo</a>
+                    <a class="nav-link c" href="#">Ayuda/PQR</a>
+                </div>
+            </div>
         </div>
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
             aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
@@ -26,10 +40,13 @@
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        <a class="nav-link" href="/crearpublicacion">Mis solicitudes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/crearpublicacion">Publicar</a>
+                        <a class="nav-link" href="/crearpublicacion">Crear publicación</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/crearpublicacion">Mis compras</a>
                     </li>
                 </ul>
             </div>

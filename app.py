@@ -3,9 +3,9 @@ from flask_mysqldb import MySQL,MySQLdb # pip install Flask-MySQLdb
 from random import sample
 from generador import stringAleatorio
 import os 
-from os import remove #Modulo  para remover archivo
+import time
+from os import remove #Modulo
 from os import path
-import base64
 from werkzeug.utils import secure_filename 
 from notifypy import Notify
 
@@ -45,11 +45,16 @@ def not_found():
 @app.route('/logout')
 def logout():
     session.clear()
+    time.sleep(5)
     return render_template('/inicio.html')
 
 @app.route('/sobrenosotros')
 def sobrenosotros():
     return render_template('/nosotros.html')
+
+@app.route('/solicitudes')
+def solicitudes():
+    return render_template('/solicitudes.html')
 
 
 @app.route('/catalogo')
@@ -69,7 +74,29 @@ def catalogo():
     ''')
     publicacion = cur.fetchall() 
 
-    return render_template('/catalogo.html', catalogos = catalogo, publicaciones = publicacion)
+    if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
+        persona_id = session['Id_Persona']
+        flash('Inicie sesión como usuario')
+        return redirect(url_for('iniciogsw'))
+    elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
+        return render_template('usuario/catalogo.html', catalogos = catalogo, publicaciones = publicacion)
+    else:
+        return render_template('/catalogo.html', catalogos = catalogo, publicaciones = publicacion)
+
+@app.route('/comprar/<int:producto_id>')
+def comprar(producto_id):
+    cur = mysql.connection.cursor()
+    cur.execute('''
+            SELECT publicacion.*, GROUP_CONCAT(categoria.Nombre_de_Categoria SEPARATOR ', ') AS categoria,
+            CONCAT(persona.Nombres, ' ', persona.Apellidos) AS persona
+            FROM publicacion
+            LEFT JOIN categoria ON publicacion.Categoria_Publicacion = categoria.ID_Categoria_de_Residuo
+            LEFT JOIN persona ON publicacion.Propietario = persona.Id_Persona
+            WHERE publicacion.id_publicacion = %s
+            GROUP BY publicacion.id_publicacion
+            ''', (producto_id,))
+    producto = cur.fetchone()
+    return render_template('usuario/comprar.html', producto=producto)
 
 @app.route('/registrogsw', methods = ["GET", "POST"])
 def registrogsw():
