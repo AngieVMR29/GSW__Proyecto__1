@@ -86,7 +86,8 @@ def solicitudes():
     elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
         return render_template('usuario/solicitudes.html')
     else:
-        return render_template('/solicitudes.html')
+        flash('Por favor inicie sesión para realizar las solicitudes')
+        return redirect(url_for('iniciogsw'))
 
 @app.route('/miscompras')
 def miscompras():
@@ -206,8 +207,6 @@ def comprar(producto_id):
     else:
         flash('Inicie sesión como usuario')
         return redirect(url_for('iniciogsw'))
-
-from flask import flash
 
 @app.route('/registrogsw', methods=["GET", "POST"])
 def registrogsw():
@@ -351,63 +350,77 @@ def basedeusuarios():
 
 @app.route('/crearusuario', methods=['GET','POST'])
 def crear_persona():
-
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM tipo_documento")
-    tipo = cur.fetchall()
-
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM roles")
-    roles = cur.fetchall()
-    
-    if request.method == 'POST':
-        Nombres = request.form['Nombres']
-        Apellidos = request.form['Apellidos']
-        Tipo_Doc = request.form['tipo']
-        Documento = request.form['Documento']
-        Email = request.form['Email']
-        Telefono = request.form['Telefono']
-        if(request.files['foto'] !=''):
-            file     = request.files['foto'] #recibiendo el archivo
-            nuevoNombreFile = recibeFoto(file) 
-
-        Password = request.form['Password']
-        direccion = request.form['direccion']
-        roles = request.form.getlist('roles[]')
-
-        cur.execute("SELECT * FROM persona WHERE Email = %s", (Email,))
-        existing_user = cur.fetchone()
-        if existing_user:
-            flash('El correo electrónico ya está registrado. Por favor, inicie sesión.')
-            return redirect(url_for('iniciogsw'))
+    if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM tipo_documento")
+        tipo = cur.fetchall()
 
         cur = mysql.connection.cursor()
-        cur.execute(" INSERT INTO persona (Nombres, Apellidos,Tipo_Doc, Documento, Email,Telefono, Password, foto, direccion, estado) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(Nombres, Apellidos,Tipo_Doc, Documento, Email,Telefono, Password,nuevoNombreFile,direccion,True))
-        cur.connection.commit()
+        cur.execute("SELECT * FROM roles")
+        roles = cur.fetchall()
+    
+        if request.method == 'POST':
+            Nombres = request.form['Nombres']
+            Apellidos = request.form['Apellidos']
+            Tipo_Doc = request.form['tipo']
+            Documento = request.form['Documento']
+            Email = request.form['Email']
+            Telefono = request.form['Telefono']
+            if(request.files['foto'] !=''):
+                file     = request.files['foto'] #recibiendo el archivo
+                nuevoNombreFile = recibeFoto(file) 
 
-        cur.execute("SELECT LAST_INSERT_ID()")
-        id_persona = cur.fetchone()['LAST_INSERT_ID()']
+            Password = request.form['Password']
+            direccion = request.form['direccion']
+            roles = request.form.getlist('roles[]')
 
-        for role in roles:
+            cur.execute("SELECT * FROM persona WHERE Email = %s", (Email,))
+            existing_user = cur.fetchone()
+            if existing_user:
+                flash('El correo electrónico ya está registrado. Por favor, inicie sesión.')
+                return redirect(url_for('iniciogsw'))
+
+            cur = mysql.connection.cursor()
+            cur.execute(" INSERT INTO persona (Nombres, Apellidos,Tipo_Doc, Documento, Email,Telefono, Password, foto, direccion, estado) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(Nombres, Apellidos,Tipo_Doc, Documento, Email,Telefono, Password,nuevoNombreFile,direccion,True))
+            cur.connection.commit()
+
+            cur.execute("SELECT LAST_INSERT_ID()")
+            id_persona = cur.fetchone()['LAST_INSERT_ID()']
+
+            for role in roles:
                 cur.execute("INSERT INTO asignacion_roles (id_Persona1_FK, id_roles_fk) VALUES (%s, %s)", (id_persona, role))
                 mysql.connection.commit()
 
         
-        flash('Persona creada exitosamente')
-        return redirect(url_for('basedeusuarios'))
+            flash('Persona creada exitosamente')
+            return redirect(url_for('basedeusuarios'))
+    elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
+        flash('No tienes permisos para ingresar a esta página.')
+        return redirect(url_for('iniciogsw'))
+    else:
+        flash('No has iniciado sesión.')
+        return redirect(url_for('iniciogsw'))
+
     return render_template('administrador/usuarios/crearusuario.html',  tipos = tipo, roles = roles)
 
     
 
 @app.route('/eliminar/<string:id>')
 def eliminar_persona(id):
-        cur = mysql.connection.cursor()
-        cur.execute("DELETE FROM asignacion_roles WHERE id_Persona1_FK = %s", (id,))
-        cur.execute('DELETE FROM persona WHERE Id_Persona = %s',(id,))
-        cur.connection.commit()
+        if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
+            cur = mysql.connection.cursor()
+            cur.execute("DELETE FROM asignacion_roles WHERE id_Persona1_FK = %s", (id,))
+            cur.execute('DELETE FROM persona WHERE Id_Persona = %s',(id,))
+            cur.connection.commit()
         
-        flash('Persona eliminada exitosamente')
-        return redirect(url_for('basedeusuarios'))
+            flash('Persona eliminada exitosamente')
+            return redirect(url_for('basedeusuarios'))
+        elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
+            flash('No tienes permisos para ingresar a esta página.')
+            return redirect(url_for('iniciogsw'))
+        else:
+            flash('No has iniciado sesión.')
+            return redirect(url_for('iniciogsw'))
 
 
 @app.route('/editar/<string:id>', methods=['GET','POST'])
@@ -454,37 +467,61 @@ def basedepublicaciones():
 
 @app.route('/eliminarpublicacion/<string:id>')
 def eliminarpublicacion(id):
-        cur = mysql.connection.cursor()
-        cur.execute('DELETE FROM publicacion WHERE id_publicacion = %s',(id,))
-        cur.connection.commit()
-        flash('Publicación eliminada con exito')
-        return redirect(url_for('basedepublicaciones'))
+        if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
+            cur = mysql.connection.cursor()
+            cur.execute('DELETE FROM publicacion WHERE id_publicacion = %s',(id,))
+            cur.connection.commit()
+            flash('Publicación eliminada con exito')
+            return redirect(url_for('basedepublicaciones'))
+        elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
+            flash('No tienes permisos para ingresar a esta página.')
+            return redirect(url_for('iniciogsw'))
+        else:
+            flash('No has iniciado sesión.')
+            return redirect(url_for('iniciogsw'))
 
 @app.route('/categorias', methods=['GET','POST'])
 def categorias():
-    cur = mysql.connection.cursor()
-    cur.execute('SELECT * FROM categoria')
-    categoria = cur.fetchall()
-    if request.method == 'POST':
-        Nombre_de_Categoria = request.form['Nombre_de_Categoria']
-        Estado_Categoria = True
-        cur.execute(" INSERT INTO categoria (Nombre_de_Categoria,Estado_Categoria) VALUES (%s,%s)",(Nombre_de_Categoria,Estado_Categoria))
-        cur.connection.commit()
-    return render_template('administrador/publicacion/categoria.html', categorias= categoria)
+    if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
+        cur = mysql.connection.cursor()
+        cur.execute('SELECT * FROM categoria')
+        categoria = cur.fetchall()
+        if request.method == 'POST':
+            Nombre_de_Categoria = request.form['Nombre_de_Categoria']
+            Estado_Categoria = True
+            cur.execute(" INSERT INTO categoria (Nombre_de_Categoria,Estado_Categoria) VALUES (%s,%s)",(Nombre_de_Categoria,Estado_Categoria))
+            cur.connection.commit()
+        return render_template('administrador/publicacion/categoria.html', categorias= categoria)
+    elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
+            flash('No tienes permisos para ingresar a esta página.')
+            return redirect(url_for('iniciogsw'))
+    else:
+        flash('No has iniciado sesión.')
+        return redirect(url_for('iniciogsw'))
 
 @app.route('/eliminarcategorias/<string:id>')
 def eliminarcategorias(id):
+    if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
         cur = mysql.connection.cursor()
         cur.execute('DELETE FROM categoria WHERE ID_Categoria_de_Residuo = %s',(id,))
         cur.connection.commit()
         return redirect(url_for('categorias'))
-
+    elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
+        flash('No tienes permisos para ingresar a esta página.')
+        return redirect(url_for('iniciogsw'))
+    else:
+        flash('No has iniciado sesión.')
+        return redirect(url_for('iniciogsw'))
 
 @app.route('/usuario', methods=['GET','POST'])
 def usuario():
-    if 'email' in session and 'rol' in session and session['rol'] in (3, 4):
+    if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
         return render_template('usuario/usuario.html')
+    elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
+        flash('No tienes permisos para ingresar a esta página.')
+        return redirect(url_for('iniciogsw'))
     else:
+        flash('No has iniciado sesión.')
         return redirect(url_for('iniciogsw'))
 
 @app.route('/perfilu')
