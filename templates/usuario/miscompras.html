@@ -12,7 +12,6 @@
                     <th>Comprador</th>
                     <th>Estado de Compra</th>
                     <th>Vendedor</th>
-                    <th>Estado de Compra</th>
                     <th>Cambiar estado</th>
                 </tr>
             </thead>
@@ -22,20 +21,20 @@
                     <td>{{ compra['id_compra'] }}</td>
                     <td>{{ compra['nombre_publicacion'] }}</td>
                     <td>{{ compra['nombre_comprador'] }}</td>
-                    <td>{{ compra['estado_compra'] }}</td>
+                    <td style="text-align: center;">{% if(compra['estado_compra'] == 1) %}
+                        Activo
+                        {% else %}
+                        Completado
+                        {% endif %}</td>
                     <td>{{ compra['nombre_vendedor'] }}</td>
-                    <td>{% for ultimo in ultimos %}
-                        {{ ultimo['estados_compra'] }}
-                        {% endfor %}</td>
                     <td>
                         <form action="{{ url_for('confirmar_compra', id_compra=compra.id_compra) }}" method="POST">
                             <div style="display: flex;">
                                 <div>
                                     <select class="btn" style="width: 95%; border: solid 1px #3a6317;" id="estado" name="estado">
                                         <option value="" disabled selected hidden>Seleccione</option>
-                                        {% for estado in estados %}
-                                        <option value="{{estado.id_estados}}">{{ estado.nombre_estados }}</option>
-                                        {% endfor %}
+                                        <option value="1">Activo</option>
+                                        <option value="0">Completado</option>
                                     </select>
                                 </div>
                                 <div>

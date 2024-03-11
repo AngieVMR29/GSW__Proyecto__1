@@ -56,8 +56,19 @@ def sobrenosotros():
 def compras():
     if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
         cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM compra")
+        cur.execute('''
+            SELECT compra.*, 
+            GROUP_CONCAT(publicacion.Nombre_Publicacion SEPARATOR ', ') AS nombre_publicacion,
+            CONCAT(comprador.Nombres, ' ', comprador.Apellidos) AS nombre_comprador,
+            CONCAT(vendedor.Nombres, ' ', vendedor.Apellidos) AS nombre_vendedor
+            FROM compra
+            LEFT JOIN publicacion ON compra.publicacion = publicacion.id_publicacion
+            LEFT JOIN persona AS comprador ON compra.comprador = comprador.Id_Persona
+            LEFT JOIN persona AS vendedor ON publicacion.Propietario = vendedor.Id_Persona
+            GROUP BY compra.id_compra
+            ''')
         compras = cur.fetchall()
+        cur.close()
         return render_template('administrador/publicacion/compras.html', compras = compras)
     elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
         flash('Inicie sesión como administrador')
@@ -101,11 +112,7 @@ def miscompras():
         compras = cur.fetchall()
         cur.close()
 
-        cur = mysql.connection.cursor()
-        cur.execute('SELECT * FROM estados_compra')
-        estados = cur.fetchall()
-        cur.close()
-        return render_template('usuario/miscompras.html', compras = compras, estados = estados)
+        return render_template('usuario/miscompras.html', compras = compras)
     else:
         flash('Inicie sesión, no puede ingresar a está página')
         return redirect(url_for('iniciogsw'))
@@ -114,16 +121,16 @@ def miscompras():
 @app.route('/confirmar_compra/<string:id_compra>',methods=['GET','POST'])
 def confirmar_compra(id_compra):
     if request.method == 'POST':
-            estado = request.form['estado']
-            compra_id = id_compra
-            cur = mysql.connection.cursor()
-            cur.execute(" INSERT INTO confirmar_compra (id_compra_fk,id_estado_fk) VALUES (%s,%s)",(compra_id,estado))
-            cur.connection.commit()
-            flash('Cambio de estado generado')
-            cur.close() 
-            return redirect(url_for('miscompras'))
-    else:
-        flash('Error')
+        estado = request.form['estado']
+        compra_id = id_compra
+        cur = mysql.connection.cursor()
+        cur.execute("""UPDATE compra SET 
+                        estado_Compra = %s
+                        WHERE id_compra = %s
+                    """, (estado, compra_id,))
+        mysql.connection.commit()
+        flash('Cambio de estado generado')
+        cur.close()
         return redirect(url_for('miscompras'))
 
 
@@ -200,7 +207,9 @@ def comprar(producto_id):
         flash('Inicie sesión como usuario')
         return redirect(url_for('iniciogsw'))
 
-@app.route('/registrogsw', methods = ["GET", "POST"])
+from flask import flash
+
+@app.route('/registrogsw', methods=["GET", "POST"])
 def registrogsw():
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM tipo_documento")
@@ -213,64 +222,66 @@ def registrogsw():
         Documento = request.form['Documento']
         Email = request.form['Email']
         Telefono = request.form['Telefono']
-        if(request.files['foto'] !=''):
-            file     = request.files['foto'] #recibiendo el archivo
-            nuevoNombreFile = recibeFoto(file) 
+        if 'foto' in request.files:
+            file = request.files['foto']
+            nuevoNombreFile = recibeFoto(file)
 
         Password = request.form['Password']
         direccion = request.form['direccion']
 
-        cur = mysql.connection.cursor()
-        cur.execute(" INSERT INTO persona (Nombres, Apellidos,Tipo_Doc, Documento, Email,Telefono, Password, foto, direccion, estado) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(Nombres, Apellidos,Tipo_Doc, Documento, Email,Telefono, Password,nuevoNombreFile,direccion,True))
+        cur.execute("SELECT * FROM persona WHERE Email = %s", (Email,))
+        existing_user = cur.fetchone()
+        if existing_user:
+            flash('El correo electrónico ya está registrado. Por favor, inicie sesión.')
+            return redirect(url_for('iniciogsw'))
+
+        cur.execute("INSERT INTO persona (Nombres, Apellidos, Tipo_Doc, Documento, Email, Telefono, Password, foto, direccion, estado) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (Nombres, Apellidos, Tipo_Doc, Documento, Email, Telefono, Password, nuevoNombreFile, direccion, True))
         cur.connection.commit()
 
-        cur.execute("SELECT LAST_INSERT_ID()")
-        id_persona = cur.fetchone()['LAST_INSERT_ID()']
+        id_persona = cur.lastrowid
 
         cur.execute("INSERT INTO asignacion_roles (id_roles_fk, id_Persona1_FK) VALUES (3, %s), (4, %s)", (id_persona, id_persona))
         cur.connection.commit()
 
-    return render_template('/registrate.html', tipos = tipo)
+    return render_template('/registrate.html', tipos=tipo)
 
 
-@app.route('/iniciogsw', methods =['POST', 'GET'])
+@app.route('/iniciogsw', methods=['POST', 'GET'])
 def iniciogsw():
-    notificacion = Notify()
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
 
         cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM persona WHERE Email = %s AND Password = %s",(email, password,))
+        cur.execute("SELECT * FROM persona WHERE Email = %s", (email,))
         persona = cur.fetchone()
 
         if persona:
             if password == persona["Password"]:
                 session['email'] = persona['Email']
-                Id_Persona  = persona['Id_Persona']
+                Id_Persona = persona['Id_Persona']
 
-                cur = mysql.connection.cursor()
-                cur.execute("SELECT * FROM asignacion_roles WHERE id_Persona1_FK = %s",(Id_Persona,))
-                persona = cur.fetchone()
+                cur.execute("SELECT * FROM asignacion_roles WHERE id_Persona1_FK = %s", (Id_Persona,))
+                rol_persona = cur.fetchone()
 
-                if persona['id_roles_fk'] == 1 or persona['id_roles_fk'] == 2:
-                    session['rol'] = persona['id_roles_fk']
+                if rol_persona:
+                    session['rol'] = rol_persona['id_roles_fk']
                     session['Id_Persona'] = Id_Persona
-                    return redirect(url_for('administrador'))
-                elif persona['id_roles_fk'] == 3 or persona['id_roles_fk'] == 4:
-                    session['rol'] = persona['id_roles_fk']
-                    session['Id_Persona'] = Id_Persona
-                    return redirect(url_for('usuario'))
+
+                    if rol_persona['id_roles_fk'] in (1, 2):
+                        return redirect(url_for('administrador'))
+                    elif rol_persona['id_roles_fk'] in (3, 4):
+                        return redirect(url_for('usuario'))
+                else:
+                    flash('No se encontró el rol asociado al usuario')
+                    return render_template("inicios.html")
             else:
-                notificacion.title = "Datos incorrectos, valida nuevamente"
-                notificacion.message="Correo o contraseña no valida"
-                notificacion.send()
+                flash('Contraseña incorrecta')
                 return render_template("inicios.html")
         else:
-            notificacion.title = "Error de Acceso"
-            notificacion.message="No existe el usuario"
-            notificacion.send()
+            flash('No existe el usuario con este correo electrónico')
             return render_template("inicios.html")
+
     return render_template('/inicios.html')
 
 @app.route('/administrador')
@@ -363,6 +374,12 @@ def crear_persona():
         Password = request.form['Password']
         direccion = request.form['direccion']
         roles = request.form.getlist('roles[]')
+
+        cur.execute("SELECT * FROM persona WHERE Email = %s", (Email,))
+        existing_user = cur.fetchone()
+        if existing_user:
+            flash('El correo electrónico ya está registrado. Por favor, inicie sesión.')
+            return redirect(url_for('iniciogsw'))
 
         cur = mysql.connection.cursor()
         cur.execute(" INSERT INTO persona (Nombres, Apellidos,Tipo_Doc, Documento, Email,Telefono, Password, foto, direccion, estado) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(Nombres, Apellidos,Tipo_Doc, Documento, Email,Telefono, Password,nuevoNombreFile,direccion,True))

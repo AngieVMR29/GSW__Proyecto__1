@@ -7,52 +7,6 @@
 
 {% block cuerpo %}
 
-
-<!-- <script>
-    function validarFormulario() {
-        var nombres = document.getElementById('Nombres').value;
-        var apellidos = document.getElementById('Apellidos').value;
-        var documento = document.getElementById('documento').value;
-        var email = document.getElementById('email').value;
-        var telefono = document.getElementById('telefono').value;
-        var foto = document.getElementById('foto').value;
-        var direccion = document.getElementById('direccion').value;
-        var tipoDocumento = document.getElementById('tipoDocumento').value;
-        var password = document.getElementById('password').value;
-
-        if (nombres.trim() == '' || apellidos.trim() == '' || documento.trim() == '' || email.trim() == '' || telefono.trim() == '' || foto.trim() == '' || direccion.trim() == '' || tipoDocumento.trim == '0' || password.trim() == '') {
-            alert('Por favor, complete todos los campos obligatorios.');
-            return false;
-        }
-
-        if (!lettersRegex.test(nombres) || !lettersRegex.test(apellidos)) {
-            alert('Los nombres y apellidos solo pueden contener letras en mayúsculas y minúsculas.');
-            return false;
-        }
-
-        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            alert('Por favor, ingrese un correo electrónico válido.');
-            return false;
-        }
-
-        var telefonoRegex = /^\d{10}$/;
-        if (!telefonoRegex.test(telefono)) {
-            alert('Por favor, ingrese un número de teléfono válido (10 dígitos sin espacios ni guiones).');
-            return false;
-        }
-
-
-        var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,12}$/;
-        if (!passwordRegex.test(password)) {
-            alert('La contraseña debe contener al menos una mayúscula, una minúscula, un número, un carácter especial, y tener una longitud entre 8 y 12 caracteres.');
-            return false;
-        }
-
-        return true;
-    }
-</script> -->
-
 <div class="container-fluid" style="width: 40%; height: 100%; margin-top: 2%; margin-bottom: 3%;">
     <form action="/registrogsw" class="form-control" method="post" enctype="multipart/form-data"
         onsubmit="return validarFormulario()">

@@ -2,12 +2,37 @@
 {% block title %} Base de compras{% endblock %}
 {% block cuerpo %}
 
-{% for compra in compras %}
-<tr>
-    <td>{{ compra.id_compra }}</td>
-    <td>{{ compra.publicación }}</td>
-    <td>{{ compra.comprador }}</td>
-</tr>
-{% endfor %}
+<div class="Mostrar compras" style="min-width: 100%; height: 350px;">
+    <div class="tabla_u">
+        <table style="background-color: white; margin-left: 24%;">
+            <thead>
+                <tr>
+                    <th>ID Compra</th>
+                    <th>Publicación</th>
+                    <th>Comprador</th>
+                    <th>Estado de Compra</th>
+                    <th>Vendedor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for compra in compras %}
+                <tr>
+                    <td>{{ compra.id_compra }}</td>
+                    <td>{{ compra.nombre_publicacion }}</td>
+                    <td>{{ compra.nombre_comprador }}</td>
+                    <td style="text-align: center;">
+                        {% if(compra.estado_compra == 1) %}
+                        Activo
+                        {% else %}
+                        Completado
+                        {% endif %}
+                    </td>
+                    <td>{{ compra.nombre_vendedor }}</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
 {% endblock %}
