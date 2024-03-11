@@ -52,6 +52,20 @@ def logout():
 def sobrenosotros():
     return render_template('/nosotros.html')
 
+@app.route('/compras')
+def compras():
+    if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM compra")
+        compras = cur.fetchall()
+        return render_template('administrador/publicacion/compras.html', compras = compras)
+    elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
+        flash('Inicie sesión como administrador')
+        return redirect(url_for('iniciogsw'))
+    else:
+        flash('No has iniciado sesión')
+        return redirect(url_for('iniciogsw'))
+
 @app.route('/solicitudes')
 def solicitudes():
     if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
@@ -70,10 +84,47 @@ def miscompras():
         flash('Inicie sesión como usuario')
         return redirect(url_for('iniciogsw'))
     elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
-        return render_template('usuario/miscompras.html')
+        persona_id = session['Id_Persona']
+        cur = mysql.connection.cursor()
+        cur.execute('''
+            SELECT compra.*, 
+            GROUP_CONCAT(publicacion.Nombre_Publicacion SEPARATOR ', ') AS nombre_publicacion,
+            CONCAT(comprador.Nombres, ' ', comprador.Apellidos) AS nombre_comprador,
+            CONCAT(vendedor.Nombres, ' ', vendedor.Apellidos) AS nombre_vendedor
+            FROM compra
+            LEFT JOIN publicacion ON compra.publicacion = publicacion.id_publicacion
+            LEFT JOIN persona AS comprador ON compra.comprador = comprador.Id_Persona
+            LEFT JOIN persona AS vendedor ON publicacion.Propietario = vendedor.Id_Persona
+            WHERE compra.comprador = %s
+            GROUP BY compra.id_compra
+            ''', (persona_id,))
+        compras = cur.fetchall()
+        cur.close()
+
+        cur = mysql.connection.cursor()
+        cur.execute('SELECT * FROM estados_compra')
+        estados = cur.fetchall()
+        cur.close()
+        return render_template('usuario/miscompras.html', compras = compras, estados = estados)
     else:
         flash('Inicie sesión, no puede ingresar a está página')
         return redirect(url_for('iniciogsw'))
+
+
+@app.route('/confirmar_compra/<string:id_compra>',methods=['GET','POST'])
+def confirmar_compra(id_compra):
+    if request.method == 'POST':
+            estado = request.form['estado']
+            compra_id = id_compra
+            cur = mysql.connection.cursor()
+            cur.execute(" INSERT INTO confirmar_compra (id_compra_fk,id_estado_fk) VALUES (%s,%s)",(compra_id,estado))
+            cur.connection.commit()
+            flash('Cambio de estado generado')
+            cur.close() 
+            return redirect(url_for('miscompras'))
+    else:
+        flash('Error')
+        return redirect(url_for('miscompras'))
 
 
 
@@ -103,7 +154,7 @@ def catalogo():
     else:
         return render_template('/catalogo.html', catalogos = catalogo, publicaciones = publicacion)
 
-@app.route('/comprar/<int:producto_id>')
+@app.route('/comprar/<int:producto_id>',methods=['GET','POST'])
 def comprar(producto_id):
     if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
         cur = mysql.connection.cursor()
@@ -134,6 +185,13 @@ def comprar(producto_id):
         persona = cur.fetchone() 
         cur.close() 
 
+        if request.method == 'POST':
+            publicacion = producto_id
+            comprador = persona_id
+            cur = mysql.connection.cursor()
+            cur.execute(" INSERT INTO compra (publicacion,comprador,estado_compra) VALUES (%s,%s,%s)",(publicacion,comprador,True))
+            cur.connection.commit()
+            return redirect(url_for('miscompras'))
         return render_template('usuario/comprar.html', producto=producto, persona = persona)
     elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
         flash('Inicie sesión como usuario')

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-02-2024 a las 22:17:42
+-- Tiempo de generación: 11-03-2024 a las 01:39:15
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.0.28
 
@@ -37,9 +37,11 @@ CREATE TABLE `asignacion_roles` (
 --
 
 INSERT INTO `asignacion_roles` (`id_roles_fk`, `id_Persona1_FK`) VALUES
-(1, 1),
 (3, 2),
-(4, 2);
+(4, 2),
+(3, 4),
+(4, 4),
+(1, 5);
 
 -- --------------------------------------------------------
 
@@ -52,6 +54,18 @@ CREATE TABLE `categoria` (
   `Nombre_de_Categoria` mediumtext NOT NULL,
   `Estado_Categoria` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `categoria`
+--
+
+INSERT INTO `categoria` (`ID_Categoria_de_Residuo`, `Nombre_de_Categoria`, `Estado_Categoria`) VALUES
+(1, 'Papel', 1),
+(2, 'Cartón', 1),
+(3, 'Plástico', 1),
+(4, 'Vidrio', 1),
+(5, 'Textil y calzado', 1),
+(6, 'Pilas/Baterías', 1);
 
 -- --------------------------------------------------------
 
@@ -83,6 +97,38 @@ CREATE TABLE `compra` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `confirmar_compra`
+--
+
+CREATE TABLE `confirmar_compra` (
+  `id_confirmacion` int(11) DEFAULT NULL,
+  `id_compra_fk` int(11) NOT NULL,
+  `id_estado_fk` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `estados_compra`
+--
+
+CREATE TABLE `estados_compra` (
+  `id_estados` int(11) NOT NULL,
+  `nombre_estados` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Volcado de datos para la tabla `estados_compra`
+--
+
+INSERT INTO `estados_compra` (`id:estados`, `nombre_estados`) VALUES
+(1, 'Completado'),
+(2, 'Pendiente'),
+(3, 'No Completado');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `persona`
 --
 
@@ -93,7 +139,7 @@ CREATE TABLE `persona` (
   `Documento` int(230) NOT NULL,
   `Tipo_Doc` int(11) NOT NULL,
   `Email` varchar(350) NOT NULL,
-  `Telefono` int(11) NOT NULL,
+  `Telefono` varchar(50) NOT NULL,
   `Password` varchar(200) NOT NULL,
   `direccion` varchar(250) NOT NULL,
   `foto` longblob NOT NULL,
@@ -102,6 +148,12 @@ CREATE TABLE `persona` (
 
 --
 -- Volcado de datos para la tabla `persona`
+--
+
+INSERT INTO `persona` (`Id_Persona`, `Nombres`, `Apellidos`, `Documento`, `Tipo_Doc`, `Email`, `Telefono`, `Password`, `direccion`, `foto`, `estado`) VALUES
+(2, 'Usuario', 'Prueba', 12, 1, 'usuarioprueba@gmail.com', '', 'Usuario1.', '', '', 0),
+(4, 'Sergio ', 'Cifuentes', 1000511858, 1, 'dcifu08@gmail.com', '3209161848', 'Sergio1234.', 'Cl 52', 0x49515031384c4532444f35304739364e414854462e706e67, 1),
+(5, 'Angie Vanessa', 'Mendieta Reyes', 1000516991, 1, 'angievanessamendieta@gmail.com', '3006363390', 'Avmr2002.', 'calle 14 #119a-10', 0x5052355436324f44384b5831424743464d3353452e706e67, 1);
 
 -- --------------------------------------------------------
 
@@ -117,9 +169,34 @@ CREATE TABLE `publicacion` (
   `Foto2_Publicacion` longblob NOT NULL,
   `Foto3_Publicacion` longblob NOT NULL,
   `Categoria_Publicacion` int(11) NOT NULL,
+  `Precio` varchar(250) NOT NULL,
   `Propietario` int(11) NOT NULL,
   `Estado_Publicacion` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `publicacion`
+--
+
+INSERT INTO `publicacion` (`id_publicacion`, `Nombre_Publicacion`, `Descripcion_Publicacion`, `Foto1_Publicacion`, `Foto2_Publicacion`, `Foto3_Publicacion`, `Categoria_Publicacion`, `Precio`, `Propietario`, `Estado_Publicacion`) VALUES
+(1, 'Cajas de cartón', 'En el siguiente, encontraras, cajas de cartón a la venta', 0x5a4433384d4a30414b535655455747514e5948522e6a7067, 0x4b565f4c44574a54554f334d5a303943484e34422e6a7067, 0x413635505157305f5a54424a4f434c31593848372e6a7067, 2, '12000', 2, 1),
+(4, 'Botella de prueba', 'Acá encontraras una botella de vidrio.', 0x524a33555849564d37304757463545364e3959532e6a7067, 0x52465838484f5453564a344431415033514c36572e6a7067, 0x41555f48565435574e31434f4d325044514a47342e6a7067, 4, '1000', 2, 1),
+(5, 'Papel prueba', ' Aquí encontrarás producto papel', 0x365356414249394e334a5f50323854595a4531482e6a706567, 0x33545747385345314c595530374a48355f4239342e77656270, 0x5f3941423158594856504549524b33305a4c53362e6a706567, 1, '1000', 2, 1),
+(6, 'Plástico Prueba', '  Aquí se encuentra un producto de prueba', 0x4c584e485944304649325556574a47543136455f2e77656270, 0x433855353932565953304e4a47524d515a3454582e77656270, 0x33385437344235534647414959444c4a575532502e77656270, 3, '1000', 2, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `respuestas`
+--
+
+CREATE TABLE `respuestas` (
+  `id_respuesta` int(11) NOT NULL,
+  `administrador` int(11) NOT NULL,
+  `id_solicitud` int(11) NOT NULL,
+  `respuesta` varchar(5000) NOT NULL,
+  `estado_respuesta` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -211,6 +288,19 @@ ALTER TABLE `compra`
   ADD KEY `comprador` (`comprador`);
 
 --
+-- Indices de la tabla `confirmar_compra`
+--
+ALTER TABLE `confirmar_compra`
+  ADD KEY `id_compra_fk` (`id_compra_fk`),
+  ADD KEY `id_estado-fk` (`id_estado_fk`);
+
+--
+-- Indices de la tabla `estados_compra`
+--
+ALTER TABLE `estados_compra`
+  ADD PRIMARY KEY (`id:estados`);
+
+--
 -- Indices de la tabla `persona`
 --
 ALTER TABLE `persona`
@@ -224,6 +314,14 @@ ALTER TABLE `publicacion`
   ADD PRIMARY KEY (`id_publicacion`),
   ADD KEY `id_categoria` (`Categoria_Publicacion`),
   ADD KEY `id_vendedor` (`Propietario`);
+
+--
+-- Indices de la tabla `respuestas`
+--
+ALTER TABLE `respuestas`
+  ADD PRIMARY KEY (`id_respuesta`),
+  ADD KEY `id_administrador` (`administrador`),
+  ADD KEY `id_solicitud` (`id_solicitud`);
 
 --
 -- Indices de la tabla `roles`
@@ -252,7 +350,7 @@ ALTER TABLE `tipo_documento`
 -- AUTO_INCREMENT de la tabla `categoria`
 --
 ALTER TABLE `categoria`
-  MODIFY `ID_Categoria_de_Residuo` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_Categoria_de_Residuo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `chat`
@@ -267,16 +365,28 @@ ALTER TABLE `compra`
   MODIFY `id_compra` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `estados_compra`
+--
+ALTER TABLE `estados_compra`
+  MODIFY `id:estados` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT de la tabla `persona`
 --
 ALTER TABLE `persona`
-  MODIFY `Id_Persona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `Id_Persona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `publicacion`
 --
 ALTER TABLE `publicacion`
-  MODIFY `id_publicacion` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_publicacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+
+--
+-- AUTO_INCREMENT de la tabla `respuestas`
+--
+ALTER TABLE `respuestas`
+  MODIFY `id_respuesta` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `roles`
@@ -321,6 +431,13 @@ ALTER TABLE `compra`
   ADD CONSTRAINT `publicacion` FOREIGN KEY (`publicacion`) REFERENCES `publicacion` (`id_publicacion`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
+-- Filtros para la tabla `confirmar_compra`
+--
+ALTER TABLE `confirmar_compra`
+  ADD CONSTRAINT `id_compra_fk` FOREIGN KEY (`id_compra_fk`) REFERENCES `compra` (`id_compra`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `id_estado-fk` FOREIGN KEY (`id_estado_fk`) REFERENCES `estados_compra` (`id:estados`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
 -- Filtros para la tabla `persona`
 --
 ALTER TABLE `persona`
@@ -332,6 +449,13 @@ ALTER TABLE `persona`
 ALTER TABLE `publicacion`
   ADD CONSTRAINT `id_categoria` FOREIGN KEY (`Categoria_Publicacion`) REFERENCES `categoria` (`ID_Categoria_de_Residuo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `id_vendedor` FOREIGN KEY (`Propietario`) REFERENCES `asignacion_roles` (`id_Persona1_FK`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `respuestas`
+--
+ALTER TABLE `respuestas`
+  ADD CONSTRAINT `id_administrador` FOREIGN KEY (`administrador`) REFERENCES `persona` (`Id_Persona`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `id_solicitud` FOREIGN KEY (`id_solicitud`) REFERENCES `solicitudes` (`id_solicitudes`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `solicitudes`

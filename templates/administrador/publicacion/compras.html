@@ -1,0 +1,13 @@
+{% extends './administrador/administrador.html' %}
+{% block title %} Base de compras{% endblock %}
+{% block cuerpo %}
+
+{% for compra in compras %}
+<tr>
+    <td>{{ compra.id_compra }}</td>
+    <td>{{ compra.publicación }}</td>
+    <td>{{ compra.comprador }}</td>
+</tr>
+{% endfor %}
+
+{% endblock %}

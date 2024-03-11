@@ -80,9 +80,11 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
+                            {% if persona %}
                             <div class="modal-body">
-                                <form action="/procesar_pago" method="POST" onsubmit="return validarFormulario()">
-                                    {% if persona %}
+                                <form action="{{ url_for('comprar', producto_id=producto.id_publicacion) }}" method="POST"
+                                    onsubmit="return validarFormulario()">
+            
                                     <h6>Confirmar Dirección: <br> {{ persona['direccion'] }}</h6>
                                     <label for="">Correcto</label>
                                     <input type="checkbox" required>
@@ -115,39 +117,43 @@
                                     <div id="campos_tarjeta" style="display: none;">
                                         <h5>Datos de la Tarjeta de Crédito:</h5>
                                         <label for="numero_tarjeta">Número de Tarjeta:</label>
-                                        <input type="text" id="numero_tarjeta" name="numero_tarjeta" style="border-radius: 5px;"><br>
+                                        <input type="text" id="numero_tarjeta" name="numero_tarjeta"
+                                            style="border-radius: 5px;"><br>
 
-                                        <label for="nombre_tarjeta" style="margin-top: 2%;">Fecha de Vencimiento:</label>
-                                        <input type="date" id="nombre_tarjeta" name="nombre_tarjeta" style="margin-top: 2%; border-radius: 5px;"><br>
+                                        <label for="nombre_tarjeta" style="margin-top: 2%;">Fecha de
+                                            Vencimiento:</label>
+                                        <input type="date" id="nombre_tarjeta" name="nombre_tarjeta"
+                                            style="margin-top: 2%; border-radius: 5px;"><br>
                                     </div>
 
                                     <div id="campos_transferencia" style="display: none;">
                                         <h5>Detalles de la Transferencia Bancaria:</h5>
                                         <label for="banco_destino">Banco Destino:</label>
-                                        <input type="text" id="banco_destino" name="banco_destino" style="border-radius: 5px;"><br>
+                                        <input type="text" id="banco_destino" name="banco_destino"
+                                            style="border-radius: 5px;"><br>
 
-                                        <label for="numero_cuenta" style="border-radius: 5px;">Número de Cuenta Destino:</label>
-                                        <input type="text" id="numero_cuenta" name="numero_cuenta" style="margin-top: 2%; border-radius: 5px;"><br>
+                                        <label for="numero_cuenta" style="border-radius: 5px;">Número de Cuenta
+                                            Destino:</label>
+                                        <input type="text" id="numero_cuenta" name="numero_cuenta"
+                                            style="margin-top: 2%; border-radius: 5px;"><br>
                                     </div>
 
                                     <div id="campos_paypal" style="display: none;">
                                         <h5>Detalles de la Cuenta PayPal:</h5>
                                         <label for="email_paypal">Correo Electrónico PayPal:</label>
-                                        <input type="email" id="email_paypal" name="email_paypal" style="border-radius: 5px;"><br>
+                                        <input type="email" id="email_paypal" name="email_paypal"
+                                            style="border-radius: 5px;"><br>
                                     </div>
 
-                                </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
+                                <button type="submit" class="btn"
+                                    style="background-color: #3a6317; color: #fff;">Comprar</button>
                             </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-
-                <!-- <form method="POST" action="/agregar_al_carrito/{{ producto.id_publicacion }}">
-                    <button class="btn-login" type="submit" style="height: 50px;" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-cart4" style="margin-right: 5%;"></i>Comprar</button> -->
                 </form>
             </div>
         </div>
