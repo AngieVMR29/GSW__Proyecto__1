@@ -346,8 +346,8 @@ nav {
     border-bottom: 1px solid #3a6317;
 }
 
-.tabla_u th {
-    background-color: #cde6b7;
+.tabla_u thead {
+    background-color: #aad385;
 }
 
 

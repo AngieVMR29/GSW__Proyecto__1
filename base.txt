@@ -106,25 +106,7 @@ CREATE TABLE `confirmar_compra` (
   `id_estado_fk` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
--- --------------------------------------------------------
 
---
--- Estructura de tabla para la tabla `estados_compra`
---
-
-CREATE TABLE `estados_compra` (
-  `id_estados` int(11) NOT NULL,
-  `nombre_estados` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Volcado de datos para la tabla `estados_compra`
---
-
-INSERT INTO `estados_compra` (`id:estados`, `nombre_estados`) VALUES
-(1, 'Completado'),
-(2, 'Pendiente'),
-(3, 'No Completado');
 
 -- --------------------------------------------------------
 

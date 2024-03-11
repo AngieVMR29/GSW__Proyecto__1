@@ -84,6 +84,7 @@ def solicitudes():
         flash('Inicie sesión como usuario')
         return redirect(url_for('iniciogsw'))
     elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
+        persona_id = session['Id_Persona']
         return render_template('usuario/solicitudes.html')
     else:
         flash('Por favor inicie sesión para realizar las solicitudes')
@@ -117,6 +118,57 @@ def miscompras():
     else:
         flash('Inicie sesión, no puede ingresar a está página')
         return redirect(url_for('iniciogsw'))
+
+@app.route('/mispublicaciones')
+def mispublicaciones():
+    if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
+        persona_id = session['Id_Persona']
+        flash('Inicie sesión como usuario')
+        return redirect(url_for('iniciogsw'))
+    elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
+        persona_id = session['Id_Persona']
+        cur = mysql.connection.cursor()
+        cur.execute('''
+            SELECT publicacion.*, GROUP_CONCAT(categoria.Nombre_de_Categoria SEPARATOR ', ') AS categoria,
+            CONCAT(persona.Nombres, ' ', persona.Apellidos) AS persona
+            FROM publicacion
+            LEFT JOIN categoria ON publicacion.Categoria_Publicacion = categoria.ID_Categoria_de_Residuo
+            LEFT JOIN persona ON publicacion.Propietario = persona.Id_Persona
+            WHERE publicacion.Propietario = %s
+            GROUP BY publicacion.id_publicacion
+            ''', (persona_id,))
+        publicacion = cur.fetchall()  
+        cur.close()
+
+        return render_template('usuario/mispublicaciones.html', publicaciones = publicacion)
+    else:
+        flash('Inicie sesión, no puede ingresar a está página')
+        return redirect(url_for('iniciogsw'))
+    
+@app.route('/eliminarpublicacion/<string:id_publicacion>')
+def eliminarpublicacion(id_publicacion):
+        if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
+            
+            cur = mysql.connection.cursor()
+            cur.execute("SELECT * FROM compra WHERE publicacion = %s", (id_publicacion,))
+            compra_existente = cur.fetchone()
+            cur.close()
+
+            if compra_existente:
+                flash('Este producto no está disponible, tiene una compra pendiente.')
+                return redirect(url_for('mispublicaciones'))
+            else:
+                cur = mysql.connection.cursor()
+                cur.execute('DELETE FROM publicacion WHERE id_publicacion = %s',(id_publicacion,))
+                cur.connection.commit()
+                flash('Publicación eliminada con exito')
+                return redirect(url_for('mispublicaciones'))
+        elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
+            flash('No tienes permisos para ingresar a esta página.')
+            return redirect(url_for('iniciogsw'))
+        else:
+            flash('No has iniciado sesión.')
+            return redirect(url_for('iniciogsw'))
 
 
 @app.route('/confirmar_compra/<string:id_compra>',methods=['GET','POST'])
@@ -193,6 +245,15 @@ def comprar(producto_id):
         persona = cur.fetchone() 
         cur.close() 
 
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM compra WHERE publicacion = %s", (producto_id,))
+        compra_existente = cur.fetchone()
+        cur.close()
+
+        if compra_existente:
+            flash('Este producto no está disponible para comprar.')
+            return redirect(url_for('miscompras'))
+
         if request.method == 'POST':
             publicacion = producto_id
             comprador = persona_id
@@ -207,6 +268,27 @@ def comprar(producto_id):
     else:
         flash('Inicie sesión como usuario')
         return redirect(url_for('iniciogsw'))
+    
+
+@app.route('/eliminar_compra/<int:compra_id>')
+def eliminar_compra(compra_id):
+    if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
+
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM compra WHERE id_compra = %s AND comprador = %s", (compra_id, session['Id_Persona']))
+        compra = cur.fetchone()
+        cur = mysql.connection.cursor()
+        cur.execute("DELETE FROM compra WHERE id_compra = %s", (compra_id,))
+        mysql.connection.commit()
+        flash('Compra eliminada con éxito.')
+        cur.close()
+
+        return redirect(url_for('miscompras'))
+    else:
+        flash('Inicie sesión como usuario.')
+        return redirect(url_for('iniciogsw'))
+
+
 
 @app.route('/registrogsw', methods=["GET", "POST"])
 def registrogsw():
@@ -465,20 +547,6 @@ def basedepublicaciones():
         flash('No has iniciado sesión.')
         return redirect(url_for('iniciogsw'))
 
-@app.route('/eliminarpublicacion/<string:id>')
-def eliminarpublicacion(id):
-        if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
-            cur = mysql.connection.cursor()
-            cur.execute('DELETE FROM publicacion WHERE id_publicacion = %s',(id,))
-            cur.connection.commit()
-            flash('Publicación eliminada con exito')
-            return redirect(url_for('basedepublicaciones'))
-        elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
-            flash('No tienes permisos para ingresar a esta página.')
-            return redirect(url_for('iniciogsw'))
-        else:
-            flash('No has iniciado sesión.')
-            return redirect(url_for('iniciogsw'))
 
 @app.route('/categorias', methods=['GET','POST'])
 def categorias():

@@ -1,0 +1,84 @@
+{% extends './usuario/usuario.html' %}
+{% block title %} Mis publicaciones {% endblock %}
+{% block cuerpo %}
+
+<div class="Mostrar compras" style="min-width: 100%; height: 350px;">
+    <div class="tabla_u">
+        <table style="background-color: white; margin-left: 2%;">
+            <thead>
+                <tr>
+                    <th>ID Publicación</th>
+                    <td>Publicación</td>
+                    <td>Descripción</td>
+                    <td>Foto 1</td>
+                    <td>Foto 2</td>
+                    <td>Foto 3</td>
+                    <td>Categoria</td>
+                    <td>Precio</td>
+                    <td>Propietario</td>
+                    <td>Eliminar publicación</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for publicacion in publicaciones %}
+                <tr>
+                    <td>{{ publicacion['id_publicacion'] }}</td>
+                    <td>{{ publicacion['Nombre_Publicacion'] }}</td>
+                    <td>{{ publicacion['Descripcion_Publicacion'] }}</td>
+                    {% with urlPublicacion = '/static/uploads/' %}
+                    <td>
+                        {% if(publicacion['Foto1_Publicacion'] =="") %}
+                        <img src="../../../static/uploads/sinfoto.png"  class="sin_foto_mini" alt="sinfoto">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='uploads/' + publicacion['Foto1_Publicacion'].decode('utf-8') ) }}" class="sin_foto_mini" alt="{{ publicacion['Nombre_Publicacion'] }}" style="width: 50px; height: 50px; border-radius: 50%;">
+                        {% endif %}
+                    </td>
+                    {% endwith %}
+
+                    {% with urlPublicacion = '/static/uploads/' %}
+                    <td>
+                        {% if(publicacion['Foto2_Publicacion'] =="") %}
+                        <img src="../../../static/uploads/sinfoto.png"  class="sin_foto_mini" alt="sinfoto">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='uploads/' + publicacion['Foto2_Publicacion'].decode('utf-8') ) }}" class="sin_foto_mini" alt="{{ publicacion['Nombre_Publicacion'] }}" style="width: 50px; height: 50px; border-radius: 50%;">
+                        {% endif %}
+                    </td>
+                    {% endwith %}
+
+                    {% with urlPublicacion = '/static/uploads/' %}
+                    <td>
+                        {% if(publicacion['Foto3_Publicacion'] =="") %}
+                        <img src="../../../static/uploads/sinfoto.png"  class="sin_foto_mini" alt="sinfoto">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='uploads/' + publicacion['Foto3_Publicacion'].decode('utf-8') ) }}" class="sin_foto_mini" alt="{{ publicacion['Nombre_Publicacion'] }}" style="width: 50px; height: 50px; border-radius: 50%;">
+                        {% endif %}
+                    </td>
+                    {% endwith %}
+
+
+                    <td>{{ publicacion.categoria}}</td>
+                    <td>{{ publicacion.Precio }}</td>
+                    <td>{{ publicacion.persona }}</td>
+                    <td>
+                        <a href="eliminarpublicacion/{{ publicacion['id_publicacion'] }}">Eliminar Publicación</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+
+    <div class="alert alert-warning alert-dismissible fade show" role="alert"
+        style="margin-left: 6%; margin-right: 6%; margin-bottom: 3%;">
+        <p>{{ message }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+{% endblock %}

@@ -13,6 +13,7 @@
                     <th>Estado de Compra</th>
                     <th>Vendedor</th>
                     <th>Cambiar estado</th>
+                    <th>Eliminar Compra</th>
                 </tr>
             </thead>
             <tbody>
@@ -42,6 +43,9 @@
                                 </div>
                             </div>
                         </form>
+                    </td>
+                    <td>
+                        <a href="eliminar_compra/{{ compra['id_compra'] }}">Eliminar compra</a>
                     </td>
                     {% endfor %}
                 </tr>
