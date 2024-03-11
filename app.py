@@ -54,7 +54,27 @@ def sobrenosotros():
 
 @app.route('/solicitudes')
 def solicitudes():
-    return render_template('/solicitudes.html')
+    if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
+        persona_id = session['Id_Persona']
+        flash('Inicie sesión como usuario')
+        return redirect(url_for('iniciogsw'))
+    elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
+        return render_template('usuario/solicitudes.html')
+    else:
+        return render_template('/solicitudes.html')
+
+@app.route('/miscompras')
+def miscompras():
+    if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
+        persona_id = session['Id_Persona']
+        flash('Inicie sesión como usuario')
+        return redirect(url_for('iniciogsw'))
+    elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
+        return render_template('usuario/miscompras.html')
+    else:
+        flash('Inicie sesión, no puede ingresar a está página')
+        return redirect(url_for('iniciogsw'))
+
 
 
 @app.route('/catalogo')
@@ -85,8 +105,9 @@ def catalogo():
 
 @app.route('/comprar/<int:producto_id>')
 def comprar(producto_id):
-    cur = mysql.connection.cursor()
-    cur.execute('''
+    if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
+        cur = mysql.connection.cursor()
+        cur.execute('''
             SELECT publicacion.*, GROUP_CONCAT(categoria.Nombre_de_Categoria SEPARATOR ', ') AS categoria,
             CONCAT(persona.Nombres, ' ', persona.Apellidos) AS persona
             FROM publicacion
@@ -95,8 +116,31 @@ def comprar(producto_id):
             WHERE publicacion.id_publicacion = %s
             GROUP BY publicacion.id_publicacion
             ''', (producto_id,))
-    producto = cur.fetchone()
-    return render_template('usuario/comprar.html', producto=producto)
+        producto = cur.fetchone()
+        cur.close()
+
+        persona_id = session['Id_Persona']
+        cur = mysql.connection.cursor()
+        cur.execute('''
+            SELECT persona.*, GROUP_CONCAT(roles.Nombre_Rol SEPARATOR ', ') AS roles,
+            GROUP_CONCAT(tipo_documento.Tipo_de_documento SEPARATOR ', ') AS tipo_documento
+            FROM persona
+            LEFT JOIN asignacion_roles ON persona.Id_Persona = asignacion_roles.id_Persona1_FK
+            LEFT JOIN roles ON asignacion_roles.id_roles_fk = roles.Id_Roles
+            LEFT JOIN tipo_documento ON persona.Tipo_Doc = tipo_documento.Id_Tipo_de_Documento
+            WHERE persona.Id_Persona = %s
+            GROUP BY persona.Id_Persona
+            ''', (persona_id,))
+        persona = cur.fetchone() 
+        cur.close() 
+
+        return render_template('usuario/comprar.html', producto=producto, persona = persona)
+    elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
+        flash('Inicie sesión como usuario')
+        return redirect(url_for('iniciogsw'))
+    else:
+        flash('Inicie sesión como usuario')
+        return redirect(url_for('iniciogsw'))
 
 @app.route('/registrogsw', methods = ["GET", "POST"])
 def registrogsw():
@@ -187,7 +231,6 @@ def administrador():
 def perfila():
         if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
             persona_id = session['Id_Persona']
-            print(persona_id)
             cur = mysql.connection.cursor()
             cur.execute('''
             SELECT persona.*, GROUP_CONCAT(roles.Nombre_Rol SEPARATOR ', ') AS roles,

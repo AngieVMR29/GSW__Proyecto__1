@@ -404,3 +404,17 @@ nav {
     height: 300px;
     overflow: auto;
 }
+
+
+.carousel-control-prev,
+.carousel-control-next {
+    margin-top: 30%;
+    max-width: 100px;
+    max-height: 100px;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    background-color: #555; 
+    color: #fff; 
+}

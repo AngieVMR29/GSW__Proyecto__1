@@ -2,10 +2,180 @@
 {% block title %} Comprar {% endblock %}
 {% block cuerpo %}
 
-<h1>{{ producto.Nombre_Publicacion }}</h1>
-<p>Precio: {{ producto.persona }}</p>
-<p>Descripción: {{ producto.Precio }}</p>
+<div
+    style="max-width: 90%; background-color: rgba(211, 211, 211, 0.5); border-radius: 2%; border: 1px solid black; margin: 1% 5% 1%;">
+    <h1 style="text-align: center; margin-top: 1%;">{{ producto.Nombre_Publicacion }}</h1>
+    <div style="display: flex;">
+        <div class="" style="max-width: 70%; margin: 3%">
+            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        {% with urlProducto = '/static/uploads/' %}
+
+                        {% if(producto.Foto3_Publicacion =="") %}
+                        <img src="../../../static/uploads/sinfoto.png" class="sin_foto_mini" alt="sinfoto">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='uploads/' + producto.Foto3_Publicacion.decode('utf-8') ) }}"
+                            class="sin_foto_mini" alt="{{ producto.Nombre_Publicacion }}"
+                            style="width: 600px; height: 500px; border-radius: 10px;">
+                        {% endif %}
+                        {% endwith %}
+                    </div>
+                    <div class="carousel-item">
+                        {% with urlProducto = '/static/uploads/' %}
+
+                        {% if(producto.Foto2_Publicacion =="") %}
+                        <img src="../../../static/uploads/sinfoto.png" class="sin_foto_mini" alt="sinfoto">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='uploads/' + producto.Foto2_Publicacion.decode('utf-8') ) }}"
+                            class="sin_foto_mini" alt="{{ producto.Nombre_Publicacion }}"
+                            style="width: 600px; height: 500px; border-radius: 10px;">
+                        {% endif %}
+                        {% endwith %}
+                    </div>
+                    <div class="carousel-item">
+                        {% with urlProducto = '/static/uploads/' %}
+
+                        {% if(producto.Foto1_Publicacion =="") %}
+                        <img src="../../../static/uploads/sinfoto.png" class="sin_foto_mini" alt="sinfoto">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='uploads/' + producto.Foto1_Publicacion.decode('utf-8') ) }}"
+                            class="sin_foto_mini" alt="{{ producto.Nombre_Publicacion }}"
+                            style="width: 600px; height: 500px; border-radius: 10px;">
+                        {% endif %}
+                        {% endwith %}
+                    </div>
+                </div>
+                <button class="carousel-control-prev " type="button" data-bs-target="#carouselExampleControls"
+                    data-bs-slide="prev" style="margin-left: -11%;">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+                    data-bs-slide="next" style="margin-right: -11%;">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+        <div style="max-width: 30%; margin: 3%;">
+            <h2>Datos del producto</h2>
+            <h5>Vendedor:</h5>
+            <p>{{ producto.persona }}</p>
+            <h5>Descripción</h5>
+            <p>{{ producto.Descripcion_Publicacion }}</p>
+            <h5>Categoria</h5>
+            <p>{{ producto.categoria }}</p>
+            <h5>Precio:</h5>
+            <p>$ {{ producto.Precio }}</p>
+            <div style="margin-left: 50%;">
+                <button class="btn-login" type="submit" style="height: 50px;" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal"><i class="bi bi-cart4" style="margin-right: 5%;"></i>Comprar</button>
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Confirma tus datos para la compra</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/procesar_pago" method="POST" onsubmit="return validarFormulario()">
+                                    {% if persona %}
+                                    <h6>Confirmar Dirección: <br> {{ persona['direccion'] }}</h6>
+                                    <label for="">Correcto</label>
+                                    <input type="checkbox" required>
+                                    <br>
+                                    <label for="">Incorrecto</label>
+                                    <a href="/solicitudes" style="text-decoration: none;">Envía una solicitud para
+                                        actualizar la información.</a>
+                                    <h6>Confirmar número: <br> {{ persona['Telefono'] }}</h6>
+                                    <label for="">Correcto</label>
+                                    <input type="checkbox" required>
+                                    <br>
+                                    <label for="">Incorrecto</label>
+                                    <a href="/solicitudes" style="text-decoration: none;">Envía una solicitud para
+                                        actualizar la información.</a>
+                                    {% endif %}
+
+                                    <h5>Seleccione Método de Pago:</h5>
+                                    <input type="radio" id="tarjeta" name="metodo_pago" value="tarjeta"
+                                        onchange="mostrarCampos()">
+                                    <label for="tarjeta">Tarjeta de Crédito</label><br>
+
+                                    <input type="radio" id="transferencia" name="metodo_pago" value="transferencia"
+                                        onchange="mostrarCampos()">
+                                    <label for="transferencia">Transferencia Bancaria</label><br>
+
+                                    <input type="radio" id="paypal" name="metodo_pago" value="paypal"
+                                        onchange="mostrarCampos()">
+                                    <label for="paypal">PayPal</label><br>
+
+                                    <div id="campos_tarjeta" style="display: none;">
+                                        <h5>Datos de la Tarjeta de Crédito:</h5>
+                                        <label for="numero_tarjeta">Número de Tarjeta:</label>
+                                        <input type="text" id="numero_tarjeta" name="numero_tarjeta" style="border-radius: 5px;"><br>
+
+                                        <label for="nombre_tarjeta" style="margin-top: 2%;">Fecha de Vencimiento:</label>
+                                        <input type="date" id="nombre_tarjeta" name="nombre_tarjeta" style="margin-top: 2%; border-radius: 5px;"><br>
+                                    </div>
+
+                                    <div id="campos_transferencia" style="display: none;">
+                                        <h5>Detalles de la Transferencia Bancaria:</h5>
+                                        <label for="banco_destino">Banco Destino:</label>
+                                        <input type="text" id="banco_destino" name="banco_destino" style="border-radius: 5px;"><br>
+
+                                        <label for="numero_cuenta" style="border-radius: 5px;">Número de Cuenta Destino:</label>
+                                        <input type="text" id="numero_cuenta" name="numero_cuenta" style="margin-top: 2%; border-radius: 5px;"><br>
+                                    </div>
+
+                                    <div id="campos_paypal" style="display: none;">
+                                        <h5>Detalles de la Cuenta PayPal:</h5>
+                                        <label for="email_paypal">Correo Electrónico PayPal:</label>
+                                        <input type="email" id="email_paypal" name="email_paypal" style="border-radius: 5px;"><br>
+                                    </div>
+
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <form method="POST" action="/agregar_al_carrito/{{ producto.id_publicacion }}">
+                    <button class="btn-login" type="submit" style="height: 50px;" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-cart4" style="margin-right: 5%;"></i>Comprar</button> -->
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function mostrarCampos() {
+        var metodoSeleccionado = document.querySelector('input[name="metodo_pago"]:checked').value;
+        var camposTarjeta = document.getElementById('campos_tarjeta');
+        var camposTransferencia = document.getElementById('campos_transferencia');
+        var camposPaypal = document.getElementById('campos_paypal');
+
+        // Ocultar todos los campos adicionales
+        camposTarjeta.style.display = 'none';
+        camposTransferencia.style.display = 'none';
+        camposPaypal.style.display = 'none';
+
+        // Mostrar campos adicionales según el método de pago seleccionado
+        if (metodoSeleccionado === 'tarjeta') {
+            camposTarjeta.style.display = 'block';
+        } else if (metodoSeleccionado === 'transferencia') {
+            camposTransferencia.style.display = 'block';
+        } else if (metodoSeleccionado === 'paypal') {
+            camposPaypal.style.display = 'block';
+        }
+    }
+</script>
 
 
 {% endblock %}
-
