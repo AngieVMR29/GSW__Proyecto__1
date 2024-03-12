@@ -1,9 +1,10 @@
 {% extends './usuario/usuario.html' %}
 {% block title %} Perfil Usuario {% endblock %}
 {% block cuerpo %}
-    <div class="editar">
+    <div class="editar" style="margin: 3%;">
         <form class="editar-form" method="POST" enctype="multipart/form-data"
             action="{{ url_for('editar_persona', id=id_usuario) }}">
+            <h5>Actualizar datos</h5>
             <label for="Nombres">Nombres:</label>
             <input class="form-input1" type="text" id="Nombres" name="Nombres" value="{{ usuarios.Nombres }}"
                 required><br>
@@ -11,9 +12,6 @@
             <label for="Apellidos">Apellidos:</label>
             <input class="form-input1" type="text" id="Apellidos" name="Apellidos" value="{{ usuarios.Apellidos }}"
                 required><br>
-
-            <label for="tipo">Tipo de Documento:</label>
-            <input class="form-input1" type="text" id="tipo" name="tipo" value="{{ usuarios.Tipo_Doc }}" required><br>
 
             <label for="Documento">Documento:</label>
             <input class="form-input1" type="text" id="Documento" name="Documento" value="{{ usuarios.Documento }}"
@@ -28,7 +26,7 @@
             <label for="direccion">Dirección:</label>
             <input class="form-input1" type="text" id="direccion" name="direccion" value="{{ usuarios.direccion }}"><br>
 
-            <input class="form-submit1" type="submit" value="Guardar cambios">
+            <input class="btn" style="border: solid 1px black;" type="submit" value="Guardar cambios">
         </form>
     </div>
 
