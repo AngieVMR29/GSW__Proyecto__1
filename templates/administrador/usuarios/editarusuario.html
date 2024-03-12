@@ -1,71 +1,34 @@
 {% extends './administrador/administrador.html' %}
 {% block title %} Editar usuario {% endblock %}
 {% block cuerpo %}
-<div class="container-fluid" style="width: 40%; height: 100%; margin-top: 2%; margin-bottom: 3%;">
-    <form action="/crearusuario" class="form-control" method="post" enctype="multipart/form-data" onsubmit="return validarFormulario()">
-        <h2 style="color: #3a6317;"> Crear usuario </h2>
-        <div class="form-group" style="display: flex;">
-            <label for="">Nombres: <input type="text" id="Nombres" class="form-input" name="Nombres" pattern="[A-Za-z\s]{1,50}" title="Solo se permiten letras y espacios, máximo 50 caracteres"
-                required></label>
-            <label for="">Apellidos: <input type="text" id="Apellidos" class="form-input" name="Apellidos" pattern="[A-Za-z\s]{1,50}" title="Solo se permiten letras y espacios, máximo 50 caracteres"
-                required></label>
-        </div>
-        <div class="form-group" style="display: flex;">
-            <label for=""> Tipo de documento:
-                <select class="form-input" style="width: 95%;" name="tipo" required>
-                    <option value="" disabled selected hidden>Seleccione</option>
-                    {% for tipo in tipos %}
-                    <option value="{{tipo.Id_Tipo_de_Documento}}">{{ tipo.Tipo_de_documento }}</option>
-                    {% endfor %}
-                </select></label>
-            <label for="">Número de documento: <input type="int" id="documento" class="form-input" name="Documento"
-                    style="margin-left: 3%; margin-top: 3%;" pattern="[0-9]{1,30}" maxlength="30" title="Solo se permiten números, máximo 30 caracteres y no se permiten espacios" required></label>
-        </div>
-        <div class="form-group" style="display: flex;">
-            <label for="">Email: <input type="email" id="email" class="form-input" name="Email" pattern="[^\s@]+@[^\s@]+\.[^\s@]+" title="Formato no valido" required></label>
-            <label> Telefono: <input type="text" class="form-input" name="Telefono" pattern="[0-9]{1,10}" maxlength="10" title="Solo se permiten números, máximo 10 caracteres y no se permiten espacios" required> </label>
-        </div>
-        <div class="form-group" style="display: flex;">
-            <label>Foto de perfil: <br> <input type="file" class="form-input" name="foto" accept="image/jpeg, image/png, image/jpg"
-                style="width: 85%;" required></label>
-            <label>Dirección: <input type="text" class="form-input" name="direccion"
-                    style=" width: 100%; margin-left: -10%;" required> </label>
-        </div>
+<form method="POST" enctype="multipart/form-data" action="{{ url_for('editar_persona', id=id_usuario) }}">
+    <label for="Nombres">Nombres:</label>
+    <input type="text" id="Nombres" name="Nombres" value="{{ usuario.Nombres }}" required><br>
 
-        <div class="form-group">
-            <label>Contraseña:</label>
-            <input type="password" class="form-input" name="Password" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,15}" title="Debe contener al menos: una mayúscula una minúscula un número un carácter especial una longitud entre 6 y 15 caracteres" required>
-        </div>
-        <div class="form-group">
-            <p> Roles:</p>
-            <div class="form-check">
-                <input class="form-check-input" name="roles[]" type="checkbox" value="1" id="flexCheckIndeterminate">
-                <label class="form-check-label" for="flexCheckIndeterminate">
-                    Administrador
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" name="roles[]" type="checkbox" value="2" id="flexCheckIndeterminate">
-                <label class="form-check-label" for="flexCheckIndeterminate">
-                    Moderador
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" name="roles[]" type="checkbox" value="3" id="flexCheckIndeterminate">
-                <label class="form-check-label" for="flexCheckIndeterminate">
-                    Comprador
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" name="roles[]" type="checkbox" value="4" id="flexCheckIndeterminate">
-                <label class="form-check-label" for="flexCheckIndeterminate">
-                    Vendedor
-                </label>
-            </div>
-        </div>
-        <div class="form-group">
-            <button class="btn-login" type="submit">Crear usuario</button>
-        </div>
+    <label for="Apellidos">Apellidos:</label>
+    <input type="text" id="Apellidos" name="Apellidos" value="{{ usuario.Apellidos }}" required><br>
 
-</div>
+    <label for="tipo">Tipo de Documento:</label>
+    <input type="text" id="tipo" name="tipo" value="{{ usuario.Tipo_Doc }}" required><br>
+
+    <label for="Documento">Documento:</label>
+    <input type="text" id="Documento" name="Documento" value="{{ usuario.Documento }}" required><br>
+
+    <label for="Email">Email:</label>
+    <input type="email" id="Email" name="Email" value="{{ usuario.Email }}" required><br>
+
+    <label for="Telefono">Teléfono:</label>
+    <input type="text" id="Telefono" name="Telefono" value="{{ usuario.Telefono }}"><br>
+
+    <label for="foto">Foto:</label>
+    <input type="file" id="foto" name="foto"><br>
+
+    <label for="Password">Password:</label>
+    <input type="password" id="Password" name="Password" value="{{ usuario.Password }}" required><br>
+
+    <label for="direccion">Dirección:</label>
+    <input type="text" id="direccion" name="direccion" value="{{ usuario.direccion }}"><br>
+
+    <input type="submit" value="Guardar cambios">
+</form>
 {% endblock %}

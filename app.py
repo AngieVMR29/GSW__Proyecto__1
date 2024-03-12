@@ -590,24 +590,56 @@ def eliminar_persona(id):
 
 @app.route('/editar/<string:id>', methods=['GET','POST'])
 def editar_persona(id):
-    if request.method == 'POST':
-        Nombres = request.form['Nombres']
-        Apellidos = request.form['Apellidos']
-        Documento = request.form['Documento']
-        Email = request.form['Email']
-        Password = request.form['Password']
+    if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
+        if request.method == 'POST':
+            Nombres = request.form['Nombres']
+            Apellidos = request.form['Apellidos']
+            Tipo_Doc = request.form['tipo']
+            Documento = request.form['Documento']
+            Email = request.form['Email']
+            Telefono = request.form['Telefono']
+            
+            if 'foto' in request.files:
+                file = request.files['foto']
+                if file.filename != '':
+                    nuevoNombreFile = recibeFoto(file) 
 
-        cur = mysql.connection.cursor()
-        cur.execute("""UPDATE persona SET 
-                Nomres = %s, 
-                Apellidos = %s, 
-                Documento = %s, 
-                Email= %s, 
-                Password = %s
-                WHERE Id_Persona = %s
-                """,(Nombres, Apellidos, Documento, Email, Password,))
-        flash('Actualización de datos exitosa')
-        return redirect(url_for('basedeusuarios'))
+
+            Password = request.form['Password']
+            direccion = request.form['direccion']
+
+            cur = mysql.connection.cursor()
+            cur.execute("""UPDATE persona SET 
+                Nombres = %s,
+                Apellidos = %s,
+                Tipo_Doc = %s,
+                Documento = %s,
+                Email = %s,
+                Telefono = %s,
+                Password = %s,
+                foto = %s,
+                direccion = %s
+                WHERE Id_Persona = %s""",
+                (Nombres, Apellidos, Tipo_Doc, Documento, Email, Telefono, Password,nuevoNombreFile, direccion, id))
+            mysql.connection.commit()
+            flash('Actualización de datos exitosa')
+            return redirect(url_for('basedeusuarios'))
+        elif request.method == 'GET':
+            cur = mysql.connection.cursor()
+            cur.execute("SELECT * FROM persona WHERE Id_Persona = %s", (id,))
+            usuario = cur.fetchone() 
+
+        if usuario:
+            return render_template('administrador/usuarios/editarusuario.html', usuario=usuario)
+        else:
+            flash('El usuario no existe')
+            return redirect(url_for('basedeusuarios'))
+    elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
+        flash('No tienes permisos para ingresar a esta página.')
+        return redirect(url_for('iniciogsw'))
+    else:
+        flash('No has iniciado sesión.')
+        return redirect(url_for('iniciogsw'))
     
 @app.route('/basedepublicaciones', methods=['GET','POST'])
 def basedepublicaciones():
