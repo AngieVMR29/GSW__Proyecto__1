@@ -107,30 +107,43 @@ def solicitudes():
         flash('Por favor inicie sesión para realizar las solicitudes')
         return redirect(url_for('iniciogsw'))
     
-@app.route('/respuesta/<string:id_solicitudes>',methods = ['GET','POST'])
+@app.route('/respuesta/<string:id_solicitudes>', methods=['GET', 'POST'])
 def respuesta(id_solicitudes):
-    if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
-        if request.method == 'POST':
-            persona_id = session['Id_Persona']
-            administrador = persona_id
-            id_solicitud = id_solicitudes
-            respuesta = request.form['respuesta']
+    if 'email' in session and 'Id_Persona' in session and 'rol' in session:
+        if session['rol'] in (1, 2):
             cur = mysql.connection.cursor()
-            cur.execute(" INSERT INTO respuestas (administrador,id_solicitud,respuesta,Estado_Solicitudes) VALUES (%s,%s,%s,%s)",(administrador,id_solicitud,respuesta,True))
-            cur.connection.commit()
-            flash('Respondió correctamente la solicitud')
+            cur.execute("SELECT * FROM respuestas WHERE id_solicitud = %s", (id_solicitudes,))
+            respuesta_existente = cur.fetchone()
+            if respuesta_existente:
+                flash('Esta solicitud ya tiene una respuesta.')
+                return redirect(url_for('solicitudes'))
+            if request.method == 'POST':
+                persona_id = session['Id_Persona']
+                administrador = persona_id
+                id_solicitud = id_solicitudes
+                respuesta = request.form['respuesta']
+                cur = mysql.connection.cursor()
+                cur.execute("INSERT INTO respuestas (administrador, id_solicitud, respuesta, estado_respuesta) VALUES (%s, %s, %s, %s)", (administrador, id_solicitud, respuesta, True))
+                cur.connection.commit()
+                cur.execute("UPDATE solicitudes SET Estado_Solicitudes = %s WHERE id_solicitudes = %s", (False, id_solicitud,))
+                mysql.connection.commit()
+                flash('Respondió correctamente la solicitud') 
+                return redirect(url_for('solicitudes'))
 
-            cur = mysql.connection.cursor()
-            cur.execute("""UPDATE solicitudes SET 
-                        estado_Compra = %s
-                        WHERE id_solicitudes = %s
-                    """, (False, id_solicitud,))
-            mysql.connection.commit()
-            return render_template('administrador/solicitudes/solicitudes.html', solicitudes = solicitudes)
-        return render_template('administrador/solicitudes/respuestas.html')
-    elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
-        flash('No tiene permisos para ingresar a está sección')
-        return redirect(url_for('iniciogsw'))
+            else:
+                id_solicitud = id_solicitudes
+                cur = mysql.connection.cursor()
+                cur.execute('''
+                    SELECT solicitudes.*, GROUP_CONCAT(persona.Nombres, ' ', persona.Apellidos) AS persona
+                    FROM solicitudes
+                    LEFT JOIN persona ON solicitudes.Solicitante = persona.Id_Persona
+                    GROUP BY solicitudes.id_solicitudes
+                ''')
+                solicitudes = cur.fetchall()
+                return render_template('administrador/solicitudes/respuestas.html', solicitudes=solicitudes, id_solicitud= id_solicitud)
+        else:
+            flash('No tiene permisos para ingresar a esta sección')
+            return redirect(url_for('iniciogsw'))
     else:
         flash('Por favor inicie sesión para realizar las solicitudes')
         return redirect(url_for('iniciogsw'))
