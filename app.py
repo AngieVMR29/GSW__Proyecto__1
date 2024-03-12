@@ -77,18 +77,88 @@ def compras():
         flash('No has iniciado sesión')
         return redirect(url_for('iniciogsw'))
 
-@app.route('/solicitudes')
+@app.route('/solicitudes', methods = ['GET','POST'])
 def solicitudes():
+    if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
+        persona_id = session['Id_Persona']
+        cur = mysql.connection.cursor()
+        cur.execute('''
+            SELECT solicitudes.*, GROUP_CONCAT(persona.Nombres, ' ', persona.Apellidos) AS persona
+            FROM solicitudes
+            LEFT JOIN persona ON solicitudes.Solicitante = persona.Id_Persona
+            GROUP BY solicitudes.id_solicitudes
+            ''')
+        solicitudes = cur.fetchall() 
+        return render_template('administrador/solicitudes/solicitudes.html', solicitudes = solicitudes)
+    elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
+        persona_id = session['Id_Persona']
+        if request.method == 'POST':
+            Solicitante = persona_id
+            asunto_solicitud = request.form['asunto_solicitud']
+            Descripcion_Solicitud = request.form['Descripcion_Solicitud']
+            cur = mysql.connection.cursor()
+            cur.execute(" INSERT INTO solicitudes (Solicitante,asunto_solicitud,Descripcion_Solicitud,Estado_Solicitudes) VALUES (%s,%s,%s,%s)",(Solicitante,asunto_solicitud,Descripcion_Solicitud,True))
+            cur.connection.commit()
+            flash('Solicitud enviada con exito')
+            return redirect(url_for('missolicitudes'))
+        else:
+            return render_template('usuario/solicitudes.html')
+    else:
+        flash('Por favor inicie sesión para realizar las solicitudes')
+        return redirect(url_for('iniciogsw'))
+    
+@app.route('/respuesta/<string:id_solicitudes>',methods = ['GET','POST'])
+def respuesta(id_solicitudes):
+    if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
+        if request.method == 'POST':
+            persona_id = session['Id_Persona']
+            administrador = persona_id
+            id_solicitud = id_solicitudes
+            respuesta = request.form['respuesta']
+            cur = mysql.connection.cursor()
+            cur.execute(" INSERT INTO respuestas (administrador,id_solicitud,respuesta,Estado_Solicitudes) VALUES (%s,%s,%s,%s)",(administrador,id_solicitud,respuesta,True))
+            cur.connection.commit()
+            flash('Respondió correctamente la solicitud')
+
+            cur = mysql.connection.cursor()
+            cur.execute("""UPDATE solicitudes SET 
+                        estado_Compra = %s
+                        WHERE id_solicitudes = %s
+                    """, (False, id_solicitud,))
+            mysql.connection.commit()
+            return render_template('administrador/solicitudes/solicitudes.html', solicitudes = solicitudes)
+        return render_template('administrador/solicitudes/respuestas.html')
+    elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
+        flash('No tiene permisos para ingresar a está sección')
+        return redirect(url_for('iniciogsw'))
+    else:
+        flash('Por favor inicie sesión para realizar las solicitudes')
+        return redirect(url_for('iniciogsw'))
+
+
+@app.route('/missolicitudes')
+def missolicitudes():
     if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
         persona_id = session['Id_Persona']
         flash('Inicie sesión como usuario')
         return redirect(url_for('iniciogsw'))
     elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
         persona_id = session['Id_Persona']
-        return render_template('usuario/solicitudes.html')
+        cur = mysql.connection.cursor()
+        cur.execute('''
+            SELECT solicitudes.*, GROUP_CONCAT(persona.Nombres, ' ', persona.Apellidos) AS persona
+            FROM solicitudes
+            LEFT JOIN persona ON solicitudes.Solicitante = persona.Id_Persona
+            WHERE solicitudes.Solicitante = %s
+            GROUP BY solicitudes.id_solicitudes
+            ''', (persona_id,))
+        solicitudes = cur.fetchall() 
+        print(solicitudes)
+        return render_template('usuario/missolicitudes.html', solicitudes = solicitudes)
     else:
         flash('Por favor inicie sesión para realizar las solicitudes')
         return redirect(url_for('iniciogsw'))
+
 
 @app.route('/miscompras')
 def miscompras():

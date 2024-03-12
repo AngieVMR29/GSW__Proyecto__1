@@ -1,0 +1,19 @@
+{% extends './administrador/administrador.html' %}
+{% block title %} Responder solicitud {% endblock %}
+{% block cuerpo %}
+<div class="container"
+    style="width: 40%; min-height: 400px; display: flex;flex-direction: column; background-color: #fff; margin: 5% 30% 5%;">
+    <h1 style="text-align: center; color: #3a6317;">Respuesta</h1>
+    <form action="{{ url_for('respuesta', id_solicitudes = solicitud.id_solicitudes) }}" method="POST" onsubmit="return validarFormulario()">
+        <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Respuesta de de solicitud: </label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                style="max-height: 200px; min-height: 200px; overflow: auto;" name="respuesta" maxlength="50000"
+                required></textarea>
+        </div>
+        <div>
+            <button type="submit" class="btn" style="margin-bottom: 2%; margin-left: 36%; border: solid 1px #3a6317;">Enviar solicitud</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

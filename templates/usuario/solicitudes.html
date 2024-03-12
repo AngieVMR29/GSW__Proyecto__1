@@ -4,15 +4,21 @@
 <div class="container"
     style="width: 40%; min-height: 400px; display: flex;flex-direction: column; background-color: #fff; margin: 5% 30% 5%;">
     <h1 style="text-align: center; color: #3a6317;">Tu solicitud</h1>
-    <form action="" method="post">
+    <form action="/solicitudes" method="POST" onsubmit="return validarFormulario()">
+        <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Asunto de solicitud: </label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                style="max-height: 40px; min-height: 40px; overflow: auto;" pattern="[A-Za-z\s]{1,50}" title="Solo se permiten letras y espacios, máximo 50 caracteres" name="asunto_solicitud"
+                required></textarea>
+        </div>
         <div class="mb-3">
             <label for="exampleFormControlTextarea1" class="form-label">Descripción de solicitud: </label>
             <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
-                style="max-height: 250px; min-height: 250px; overflow: auto;" maxlength="50000"
+                style="max-height: 200px; min-height: 200px; overflow: auto;" name="Descripcion_Solicitud" maxlength="50000"
                 required></textarea>
         </div>
         <div>
-            <button type="submit" class="btn" style="margin-left: 36%; border: solid 1px #3a6317;">Enviar solicitud</button>
+            <button type="submit" class="btn" style="margin-bottom: 2%; margin-left: 36%; border: solid 1px #3a6317;">Enviar solicitud</button>
         </div>
     </form>
 </div>
