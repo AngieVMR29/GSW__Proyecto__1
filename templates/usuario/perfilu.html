@@ -31,9 +31,26 @@
             <h6>Dirección: <br> {{ persona['direccion'] }}</h6>
         </div>
     </div>
+    <div style="display: flex; flex-direction: column;">
+        <a href="{{ url_for('editar_persona', id=persona.Id_Persona) }}" class="btn" style="border: solid 1px black;">Editar Usuario</a>
+        <a href="{{ url_for('cambiar_contraseña') }}" class="btn" style="border: solid 1px black;">Cambiar contraseña</a>
+    </div>
     {% endif %}
     {% endwith %}
     {% endif %}
 </div>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+
+    <div class="alert alert-warning alert-dismissible fade show" role="alert"
+        style="margin-left: 6%; margin-right: 6%; margin-bottom: 3%;">
+        <p>{{ message }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
 
 {% endblock %}

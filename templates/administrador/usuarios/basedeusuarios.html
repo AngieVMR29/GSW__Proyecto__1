@@ -42,7 +42,7 @@
                     {% endwith %}
                     <td>{{ persona.roles }}</td>
                     <td>
-                        <a href="editar/{{ persona.Id_Persona }}">Editar usuario</a>
+                        <a href="{{ url_for('editar_persona', id = persona.Id_Persona) }}">Editar Usuario</a>
                         <a href="eliminar/{{ persona.Id_Persona }}">Eliminar usuario</a>
                     </td>
                 </tr>

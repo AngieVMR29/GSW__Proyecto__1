@@ -1,34 +1,30 @@
 {% extends './administrador/administrador.html' %}
 {% block title %} Editar usuario {% endblock %}
 {% block cuerpo %}
-<form method="POST" enctype="multipart/form-data" action="{{ url_for('editar_persona', id=id_usuario) }}">
-    <label for="Nombres">Nombres:</label>
-    <input type="text" id="Nombres" name="Nombres" value="{{ usuario.Nombres }}" required><br>
-
-    <label for="Apellidos">Apellidos:</label>
-    <input type="text" id="Apellidos" name="Apellidos" value="{{ usuario.Apellidos }}" required><br>
-
-    <label for="tipo">Tipo de Documento:</label>
-    <input type="text" id="tipo" name="tipo" value="{{ usuario.Tipo_Doc }}" required><br>
-
-    <label for="Documento">Documento:</label>
-    <input type="text" id="Documento" name="Documento" value="{{ usuario.Documento }}" required><br>
-
-    <label for="Email">Email:</label>
-    <input type="email" id="Email" name="Email" value="{{ usuario.Email }}" required><br>
-
-    <label for="Telefono">Teléfono:</label>
-    <input type="text" id="Telefono" name="Telefono" value="{{ usuario.Telefono }}"><br>
-
-    <label for="foto">Foto:</label>
-    <input type="file" id="foto" name="foto"><br>
-
-    <label for="Password">Password:</label>
-    <input type="password" id="Password" name="Password" value="{{ usuario.Password }}" required><br>
-
-    <label for="direccion">Dirección:</label>
-    <input type="text" id="direccion" name="direccion" value="{{ usuario.direccion }}"><br>
-
-    <input type="submit" value="Guardar cambios">
-</form>
+<div class="editar">
+    <form method="POST" enctype="multipart/form-data" action="{{ url_for('editar_persona', id=id_usuario) }}">
+        <label for="Nombres">Nombres:</label>
+        <input type="text" id="Nombres" name="Nombres" value="{{ usuario.Nombres }}" required><br>
+    
+        <label for="Apellidos">Apellidos:</label>
+        <input type="text" id="Apellidos" name="Apellidos" value="{{ usuario.Apellidos }}" required><br>
+    
+        <label for="tipo">Tipo de Documento:</label>
+        <input type="text" id="tipo" name="tipo" value="{{ usuario.Tipo_Doc }}" required><br>
+    
+        <label for="Documento">Documento:</label>
+        <input type="text" id="Documento" name="Documento" value="{{ usuario.Documento }}" required><br>
+    
+        <label for="Email">Email:</label>
+        <input type="email" id="Email" name="Email" value="{{ usuario.Email }}" required><br>
+    
+        <label for="Telefono">Teléfono:</label>
+        <input type="text" id="Telefono" name="Telefono" value="{{ usuario.Telefono }}"><br>
+    
+        <label for="direccion">Dirección:</label>
+        <input type="text" id="direccion" name="direccion" value="{{ usuario.direccion }}"><br>
+    
+        <input type="submit" value="Guardar cambios">
+    </form>
+</div>
 {% endblock %}

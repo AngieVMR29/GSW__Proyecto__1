@@ -1,0 +1,33 @@
+{% extends './usuario/usuario.html' %}
+{% block title %} Perfil Usuario {% endblock %}
+{% block cuerpo %}
+<div style="display: flex; flex-direction: column; margin: 5%;"> 
+    <div class="cambiar">
+        <form class="cambiar-form" method="POST" action="{{ url_for('cambiar_contraseña') }}">
+            <h5>Cambiar contraseña</h5>
+            <label for="contraseña_actual">Contraseña actual:</label>
+            <input class="form-input" type="password" id="contraseña_actual" name="contraseña_actual" required><br>
+
+            <label for="nueva_contraseña">Nueva contraseña:</label>
+            <input class="form-input" type="password" id="nueva_contraseña" name="nueva_contraseña" required><br>
+
+            <input class="btn" style="border: solid 1px black; margin-top: 5%;" type="submit" value="Cambiar contraseña">
+        </form>
+
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+
+    <div class="alert alert-warning alert-dismissible fade show" role="alert"
+        style="margin-left: 6%; margin-right: 6%; margin-top: 3%;">
+        <p>{{ message }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+</div>
+
+{% endblock %}
