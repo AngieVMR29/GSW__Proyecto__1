@@ -4,7 +4,7 @@
     <div class="editar" style="margin: 3%;">
         <form class="editar-form" method="POST" enctype="multipart/form-data"
             action="{{ url_for('editar_persona', id=id_usuario) }}">
-            <h5>Actualizar datos</h5>
+            <h5 style="text-align: center;">Actualizar datos</h5>
             <label for="Nombres">Nombres:</label>
             <input class="form-input1" type="text" id="Nombres" name="Nombres" value="{{ usuarios.Nombres }}"
                 required><br>

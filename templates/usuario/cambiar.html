@@ -1,6 +1,7 @@
 {% extends './usuario/usuario.html' %}
 {% block title %} Perfil Usuario {% endblock %}
 {% block cuerpo %}
+<div class="editar" style="margin: 3%;"></div>
 <div style="display: flex; flex-direction: column; margin: 5%;"> 
     <div class="cambiar">
         <form class="cambiar-form" method="POST" action="{{ url_for('cambiar_contraseña') }}">
