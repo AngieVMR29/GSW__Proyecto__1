@@ -7,7 +7,6 @@ import time
 from os import remove #Modulo
 from os import path
 from werkzeug.utils import secure_filename 
-from notifypy import Notify
 
 
 app = Flask(__name__)
@@ -190,14 +189,15 @@ def miscompras():
             SELECT compra.*, 
             GROUP_CONCAT(publicacion.Nombre_Publicacion SEPARATOR ', ') AS nombre_publicacion,
             CONCAT(comprador.Nombres, ' ', comprador.Apellidos) AS nombre_comprador,
-            CONCAT(vendedor.Nombres, ' ', vendedor.Apellidos) AS nombre_vendedor
+            CONCAT(vendedor.Nombres, ' ', vendedor.Apellidos) AS nombre_vendedor,
+            publicacion.Foto1_Publicacion AS foto1_publicacion
             FROM compra
             LEFT JOIN publicacion ON compra.publicacion = publicacion.id_publicacion
             LEFT JOIN persona AS comprador ON compra.comprador = comprador.Id_Persona
             LEFT JOIN persona AS vendedor ON publicacion.Propietario = vendedor.Id_Persona
             WHERE compra.comprador = %s
             GROUP BY compra.id_compra
-            ''', (persona_id,))
+    ''', (persona_id,))
         compras = cur.fetchall()
         cur.close()
 
@@ -263,15 +263,60 @@ def confirmar_compra(id_compra):
     if request.method == 'POST':
         estado = request.form['estado']
         compra_id = id_compra
+        
         cur = mysql.connection.cursor()
-        cur.execute("""UPDATE compra SET 
-                        estado_Compra = %s
-                        WHERE id_compra = %s
-                    """, (estado, compra_id,))
-        mysql.connection.commit()
-        flash('Cambio de estado generado')
+        cur.execute("SELECT estado_Compra FROM compra WHERE id_compra = %s", (compra_id,))
+        compra = cur.fetchone()
         cur.close()
-        return redirect(url_for('miscompras'))
+        
+        if compra and compra['estado_Compra'] == True:
+            cur = mysql.connection.cursor()
+            cur.execute("""UPDATE compra SET 
+                            estado_Compra = %s
+                            WHERE id_compra = %s
+                        """, (estado, compra_id,))
+            mysql.connection.commit()
+            flash('Cambio de estado generado')
+            cur.close()
+            return redirect(url_for('miscompras'))
+        else:
+            flash('La compra ya ha sido completada y no se puede cambiar su estado.')
+            return redirect(url_for('miscompras'))
+
+@app.route('/enviar_mensaje', methods=['POST'])
+def enviar_mensaje():
+        if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
+            if request.method == 'POST':
+                id_compra = request.form['id_compra']
+                mensaje = request.form['mensaje']
+                cur = mysql.connection.cursor()
+                cur.execute("SELECT estado_Compra FROM compra WHERE id_compra = %s", (id_compra,))
+                compra = cur.fetchone()
+                cur.close()
+        
+                if compra and compra['estado_Compra']:
+                    cur = mysql.connection.cursor()
+                    cur.execute("INSERT INTO chat (compra, mensaje, estado_mensaje) VALUES (%s, %s, %s)", (id_compra, mensaje, True))
+                    mysql.connection.commit()
+                    cur.close()
+
+                    flash('Su mensaje fue enviado con exito')
+                    return redirect(url_for('miscompras'))
+            id_compra = request.form.get('id_compra') 
+            if id_compra:
+                cur = mysql.connection.cursor()
+                cur.execute("SELECT mensaje FROM chat WHERE compra = %s", (id_compra,))
+                mensajes = cur.fetchall()
+                cur.close()
+                print(mensajes)
+                return render_template('usuario/miscompras.html', mensajes=mensajes)
+
+        elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
+            flash('No tienes permisos para ingresar a esta página.')
+            return redirect(url_for('iniciogsw'))
+        else:
+            flash('No has iniciado sesión.')
+            return redirect(url_for('iniciogsw'))
 
 
 

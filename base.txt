@@ -75,7 +75,7 @@ INSERT INTO `categoria` (`ID_Categoria_de_Residuo`, `Nombre_de_Categoria`, `Esta
 
 CREATE TABLE `chat` (
   `id_mensaje` int(11) NOT NULL,
-  `usuario` int(11) NOT NULL,
+  `compra` int(11) NOT NULL,
   `mensaje` longtext NOT NULL,
   `fecha_mensaje` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `estado_mensaje` tinyint(1) NOT NULL
