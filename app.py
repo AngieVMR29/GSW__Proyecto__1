@@ -186,17 +186,19 @@ def miscompras():
         persona_id = session['Id_Persona']
         cur = mysql.connection.cursor()
         cur.execute('''
-            SELECT compra.*, 
-            GROUP_CONCAT(publicacion.Nombre_Publicacion SEPARATOR ', ') AS nombre_publicacion,
-            CONCAT(comprador.Nombres, ' ', comprador.Apellidos) AS nombre_comprador,
-            CONCAT(vendedor.Nombres, ' ', vendedor.Apellidos) AS nombre_vendedor,
-            publicacion.Foto1_Publicacion AS foto1_publicacion
-            FROM compra
-            LEFT JOIN publicacion ON compra.publicacion = publicacion.id_publicacion
-            LEFT JOIN persona AS comprador ON compra.comprador = comprador.Id_Persona
-            LEFT JOIN persona AS vendedor ON publicacion.Propietario = vendedor.Id_Persona
-            WHERE compra.comprador = %s
-            GROUP BY compra.id_compra
+    SELECT compra.*, 
+    GROUP_CONCAT(publicacion.Nombre_Publicacion SEPARATOR ', ') AS nombre_publicacion,
+    CONCAT(comprador.Nombres, ' ', comprador.Apellidos) AS nombre_comprador,
+    CONCAT(vendedor.Nombres, ' ', vendedor.Apellidos) AS nombre_vendedor,
+    vendedor.Telefono AS telefono_vendedor,
+    vendedor.Direccion AS direccion_vendedor,
+    publicacion.Foto1_Publicacion AS foto1_publicacion
+    FROM compra
+    LEFT JOIN publicacion ON compra.publicacion = publicacion.id_publicacion
+    LEFT JOIN persona AS comprador ON compra.comprador = comprador.Id_Persona
+    LEFT JOIN persona AS vendedor ON publicacion.Propietario = vendedor.Id_Persona
+    WHERE compra.comprador = %s
+    GROUP BY compra.id_compra
     ''', (persona_id,))
         compras = cur.fetchall()
         cur.close()
