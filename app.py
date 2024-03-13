@@ -318,15 +318,36 @@ def enviar_mensaje():
             flash('No has iniciado sesión.')
             return redirect(url_for('iniciogsw'))
 
-
-
-@app.route('/catalogo')
+@app.route('/catalogo', methods=['GET', 'POST'])
 def catalogo():
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM categoria")
     catalogo = cur.fetchall()
 
-    cur = mysql.connection.cursor()
+    if request.method == 'POST':
+        categorias_seleccionadas = request.form.getlist('categorias')
+        if not categorias_seleccionadas:
+            cur.execute('''
+                SELECT publicacion.*, GROUP_CONCAT(categoria.Nombre_de_Categoria SEPARATOR ', ') AS categoria,
+                CONCAT(persona.Nombres, ' ', persona.Apellidos) AS persona
+                FROM publicacion
+                LEFT JOIN categoria ON publicacion.Categoria_Publicacion = categoria.ID_Categoria_de_Residuo
+                LEFT JOIN persona ON publicacion.Propietario = persona.Id_Persona
+                GROUP BY publicacion.id_publicacion
+            ''')
+        else:
+            cur.execute('''
+                SELECT publicacion.*, GROUP_CONCAT(categoria.Nombre_de_Categoria SEPARATOR ', ') AS categoria,
+                CONCAT(persona.Nombres, ' ', persona.Apellidos) AS persona
+                FROM publicacion
+                LEFT JOIN categoria ON publicacion.Categoria_Publicacion = categoria.ID_Categoria_de_Residuo
+                LEFT JOIN persona ON publicacion.Propietario = persona.Id_Persona
+                WHERE categoria.ID_Categoria_de_Residuo IN %s
+                GROUP BY publicacion.id_publicacion
+            ''', (tuple(categorias_seleccionadas),))
+        publicaciones = cur.fetchall()
+
+        return render_template('usuario/catalogo.html', catalogos=catalogo, publicaciones=publicaciones)
     cur.execute('''
         SELECT publicacion.*, GROUP_CONCAT(categoria.Nombre_de_Categoria SEPARATOR ', ') AS categoria,
         CONCAT(persona.Nombres, ' ', persona.Apellidos) AS persona
@@ -335,16 +356,16 @@ def catalogo():
         LEFT JOIN persona ON publicacion.Propietario = persona.Id_Persona
         GROUP BY publicacion.id_publicacion
     ''')
-    publicacion = cur.fetchall() 
+    publicaciones = cur.fetchall()
 
     if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (1, 2):
         persona_id = session['Id_Persona']
         flash('Inicie sesión como usuario')
         return redirect(url_for('iniciogsw'))
     elif 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
-        return render_template('usuario/catalogo.html', catalogos = catalogo, publicaciones = publicacion)
+        return render_template('usuario/catalogo.html', catalogos=catalogo, publicaciones=publicaciones)
     else:
-        return render_template('/catalogo.html', catalogos = catalogo, publicaciones = publicacion)
+        return render_template('/catalogo.html', catalogos=catalogo, publicaciones=publicaciones)
 
 @app.route('/comprar/<int:producto_id>',methods=['GET','POST'])
 def comprar(producto_id):
@@ -657,29 +678,21 @@ def editar_persona(id):
         elif request.method == 'POST':
             Nombres = request.form['Nombres']
             Apellidos = request.form['Apellidos']
-            Tipo_Doc = request.form['tipo']
             Documento = request.form['Documento']
             Email = request.form['Email']
             Telefono = request.form['Telefono']
-            
-            if 'foto' in request.files:
-                file = request.files['foto']
-                if file.filename != '':
-                    nuevoNombreFile = recibeFoto(file) 
-
             direccion = request.form['direccion']
 
             cur = mysql.connection.cursor()
             cur.execute("""UPDATE persona SET 
                 Nombres = %s,
                 Apellidos = %s,
-                Tipo_Doc = %s,
                 Documento = %s,
                 Email = %s,
                 Telefono = %s,
                 direccion = %s
                 WHERE Id_Persona = %s""",
-                (Nombres, Apellidos, Tipo_Doc, Documento, Email, Telefono, direccion, id))
+                (Nombres, Apellidos, Documento, Email, Telefono, direccion, id))
             mysql.connection.commit()
             flash('Actualización de datos exitosa')
             return redirect(url_for('basedeusuarios'))
@@ -698,29 +711,21 @@ def editar_persona(id):
         elif request.method == 'POST':
             Nombres = request.form['Nombres']
             Apellidos = request.form['Apellidos']
-            Tipo_Doc = request.form['tipo']
             Documento = request.form['Documento']
             Email = request.form['Email']
             Telefono = request.form['Telefono']
-            
-            if 'foto' in request.files:
-                file = request.files['foto']
-                if file.filename != '':
-                    nuevoNombreFile = recibeFoto(file) 
-
             direccion = request.form['direccion']
 
             cur = mysql.connection.cursor()
             cur.execute("""UPDATE persona SET 
                 Nombres = %s,
                 Apellidos = %s,
-                Tipo_Doc = %s,
                 Documento = %s,
                 Email = %s,
                 Telefono = %s,
                 direccion = %s
                 WHERE Id_Persona = %s""",
-                (Nombres, Apellidos, Tipo_Doc, Documento, Email, Telefono, direccion, id))
+                (Nombres, Apellidos, Documento, Email, Telefono, direccion, id))
             mysql.connection.commit()
             flash('Actualización de datos exitosa')
             return redirect(url_for('perfilu'))

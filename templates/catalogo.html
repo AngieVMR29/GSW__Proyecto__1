@@ -6,17 +6,22 @@
 
     <div style="display: flex; width: 18%; background-color: white; min-height: 100%;">
         <div>
-
-            <h3 style="margin-left: 60%; margin-top: 9%; color: #3a6317;"> Filtros </h3> <br>
-            {% for catalogo in catalogos %}
-            <div class="form-check" style="margin-left: 30%;">
-                <input class="form-check-input" type="checkbox" value="{{catalogo.ID_Categoria_de_Residuo}}"
-                    id="flexCheckIndeterminate {{catalogo.ID_Categoria_de_Residuo}}">
-                <label class="form-check-label" for="flexCheckIndeterminate {{catalogo.ID_Categoria_de_Residuo}}">
-                    {{catalogo.Nombre_de_Categoria}}
-                </label>
+            <div>
+                <h3 style="margin-left: 60%; margin-top: 9%; color: #3a6317;"> Filtros </h3> <br>
+                <form method="POST" action="{{ url_for('catalogo') }}">
+                    {% for categoria in catalogos %}
+                        <div class="form-check" style="margin-left: 30%;">
+                            <input class="form-check-input" type="checkbox" value="{{ categoria.ID_Categoria_de_Residuo }}" name="categorias" id="categoria{{ categoria.ID_Categoria_de_Residuo }}">
+                            <label class="form-check-label" for="categoria{{ categoria.ID_Categoria_de_Residuo }}">
+                                {{ categoria.Nombre_de_Categoria }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                    <div>
+                        <button type="submit" class="btn" style="border: 1px solid black; padding: 5px 10px; background-color: white; margin: 20%;">Filtrar</button>
+                    </div>
+                </form>
             </div>
-            {% endfor %}
         </div>
     </div>
     <div style="margin-left: 3%;">
