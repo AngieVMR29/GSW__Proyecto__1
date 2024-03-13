@@ -242,7 +242,7 @@ def eliminarpublicacion(id_publicacion):
             cur.close()
 
             if compra_existente:
-                flash('Este producto no está disponible, tiene una compra pendiente.')
+                flash('Este producto no se puede eliminar, tiene una compra pendiente.')
                 return redirect(url_for('mispublicaciones'))
             else:
                 cur = mysql.connection.cursor()
@@ -350,15 +350,19 @@ def catalogo():
 def comprar(producto_id):
     if 'email' in session and 'Id_Persona' in session and 'rol' in session and session['rol'] in (3, 4):
         cur = mysql.connection.cursor()
+        cur = mysql.connection.cursor()
         cur.execute('''
-            SELECT publicacion.*, GROUP_CONCAT(categoria.Nombre_de_Categoria SEPARATOR ', ') AS categoria,
-            CONCAT(persona.Nombres, ' ', persona.Apellidos) AS persona
-            FROM publicacion
-            LEFT JOIN categoria ON publicacion.Categoria_Publicacion = categoria.ID_Categoria_de_Residuo
-            LEFT JOIN persona ON publicacion.Propietario = persona.Id_Persona
-            WHERE publicacion.id_publicacion = %s
-            GROUP BY publicacion.id_publicacion
-            ''', (producto_id,))
+    SELECT publicacion.*, GROUP_CONCAT(categoria.Nombre_de_Categoria SEPARATOR ', ') AS categoria,
+    CONCAT(persona.Nombres, ' ', persona.Apellidos) AS persona,
+    CONCAT(vendedor.Telefono, ' ') AS vendedor,
+    vendedor.Direccion AS direccion_vendedor
+    FROM publicacion
+    LEFT JOIN categoria ON publicacion.Categoria_Publicacion = categoria.ID_Categoria_de_Residuo
+    LEFT JOIN persona AS vendedor ON publicacion.Propietario = vendedor.Id_Persona
+    LEFT JOIN persona ON publicacion.Propietario = persona.Id_Persona
+    WHERE publicacion.id_publicacion = %s
+    GROUP BY publicacion.id_publicacion
+        ''', (producto_id,))
         producto = cur.fetchone()
         cur.close()
 
@@ -876,7 +880,7 @@ def crearpublicacion():
 @app.route('/buscar', methods=['GET','POST'])
 def buscar():
     query = request.args.get('q')
-    return render_template('resultados_busqueda.html', query=query, resultados=resultados)
+    return '<h1>Seguimos trabajando para ti, este apartado aún no se encuentra disponible</h1>'
 
 if __name__ == '__main__':
     app.secret_key = "Hola1234."
